@@ -1,4 +1,4 @@
-# OvO 学术成果分享平台软件需求规格说明书（V0.1 Draft）
+# OvO 学术成果分享平台软件需求规格说明书（V0.2 Draft）
 
 > 状态：本组初稿，待组内评审与共同基线确认<br>
 > 需求基线：V1.9（FR01～FR16、IN01、NF01～NF08）<br>
@@ -33,6 +33,8 @@
 | 采集、治理与追踪 | [03-collection-governance.md](modules/03-collection-governance.md) | FR08～FR10、FR15～FR16 |
 | 统计、管理与创新 | [04-analytics-admin-innovation.md](modules/04-analytics-admin-innovation.md) | FR11～FR14、IN01 |
 | 非功能需求 | [nonfunctional.md](modules/nonfunctional.md) | NF01～NF08 |
+
+上述文件是便于评审和分工的模块概览；逐条完整规格位于 [modules/detailed/](modules/detailed/)，覆盖 107 条功能/创新子需求和 17 条非功能子需求。详细层是字段与验收条件的规范来源，概览层用于快速阅读，不以重复段落堆积篇幅。
 
 ## 5. 公共业务规则
 
@@ -79,12 +81,19 @@
 | UC-14 | 管理后台与审计 | 管理员 | FR14 |
 | UC-15 | 探索合作关系 | 访客 | IN01 |
 
-## 7. 非功能与追踪
+UC-01～UC-15 的参与者、前置/触发、主流程、备选/异常和后置条件详见 [独立用例规约](use-case-specifications.md)。
+
+## 7. 横切矩阵
+
+- 权限矩阵、状态登记表和 BR-01～BR-20 适用矩阵见 [横切规格矩阵](cross-cutting-matrices.md)。
+- 各详细子需求显式引用适用参与者、权限、状态、业务规则、验收条件、用例、非功能需求和后续图号。
+
+## 8. 非功能与追踪
 
 - 非功能需求详见 [nonfunctional.md](modules/nonfunctional.md)。
 - 系统级追踪详见 [traceability-matrix.md](traceability-matrix.md)。
 - 本轮不制作 UML 图；追踪矩阵仅预留 DGM-USECASE-01、DGM-ACTIVITY-01、DGM-STATE-01、DGM-STATE-02，待后续图模任务完成后验证。
 
-## 8. 评审状态
+## 9. 评审状态
 
 本版已固定编号和可测试行为，但仍需组内确认：V1.9 是否正式冻结、NF02 的性能目标、NF05 的一致性时限、认领证明材料范围、模拟数据是否纳入统计，以及 CodeArts Modeling 的最终导出方式。未确认项不得描述为已测结果。
