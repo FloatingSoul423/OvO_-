@@ -25,7 +25,7 @@ def main():
             for field in fields: assert f'### {field}\n\n' in block,(req,field)
             assert re.search(r'^1\. .+\n2\. .+\n3\. ',block,re.M),(req,'missing concrete steps')
             ac=re.findall(r'^- (AC-[\w-]+)：Given (.+)，When (.+)，Then (.+)',block,re.M)
-            assert len(ac)==(3 if req in CRITICAL else 2),(req,'AC count')
+            assert len(ac)==(2 if req in CRITICAL else 1),(req,'AC count')
             assert all(a.startswith('AC-'+req+'-') for a,*_ in ac),(req,'foreign AC')
             assert all(v.strip() for a,g,w,t in ac for v in (g,w,t)),(req,'empty GWT')
             assert cases[req]['given'] in block and cases[req]['then'] in block,(req,'fixture missing')
@@ -34,7 +34,7 @@ def main():
     assert len(expected)==124 and sum(r.startswith('NF') for r in expected)==17
     assert {r.split('-')[0] for r in expected}==set(LINKS)
     acs=re.findall(r'^- (AC-[\w-]+)：',whole,re.M)
-    assert len(acs)==len(set(acs))==287
+    assert len(acs)==len(set(acs))==124+len(CRITICAL)
     # Indexes must not carry duplicate normative acceptance definitions.
     for src,_,_ in INPUTS:
         assert not re.search(r'^- (?:\*\*)?AC-',(MODULES/src).read_text(encoding='utf-8'),re.M)
@@ -62,7 +62,7 @@ def main():
     assert '不返回A' in definitions['FR01-S01']
     assert '9999' in definitions['FR16-S06']
     assert '已通过但无授权' in definitions['FR05-S05']
-    for phrase in ['系统应完成该可观察能力','与本条相关的结果','且本条能力被调用','必要时更新业务状态']:
+    for phrase in ['系统应完成该可观察能力','与本条相关的结果','且本条能力被调用','必要时更新业务状态','Given 本条 E1','Given 本条 A1']:
         assert phrase not in whole,phrase
     # Verify local links and explicit anchors, including all 124 item-level edges.
     for path in normative:
@@ -72,7 +72,7 @@ def main():
             link,_,anchor=target.partition('#'); dest=(path.parent/link).resolve()
             assert dest.exists(),(str(path),target)
             if anchor: assert f'id="{anchor}"' in dest.read_text(encoding='utf-8'),target
-    stats=dict(normative_files=len(normative),physical_lines=0,nonblank_lines=0,nonspace_chars=0,han_chars=0,requirements=124,function_innovation=107,nf=17,ac=287,use_cases=15,diagrams='deferred by user')
+    stats=dict(normative_files=len(normative),physical_lines=0,nonblank_lines=0,nonspace_chars=0,han_chars=0,requirements=124,function_innovation=107,nf=17,ac=len(acs),use_cases=15,diagrams='two state diagram sources present; see docs/uml')
     for path in normative:
         text=path.read_text(encoding='utf-8'); lines=text.splitlines()
         stats['physical_lines']+=len(lines);stats['nonblank_lines']+=sum(bool(x.strip()) for x in lines)

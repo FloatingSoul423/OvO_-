@@ -19,7 +19,7 @@ from docx.shared import Cm, Pt, RGBColor
 
 ROOT = Path(__file__).resolve().parents[1]
 SRS = ROOT / "docs" / "srs"
-OUTPUT = SRS / "OvO-SRS-V0.3.docx"
+OUTPUT = SRS / "OvO-SRS-V0.4.docx"
 
 
 def clean(value: str) -> str:
@@ -74,7 +74,7 @@ def add_table(doc: Document, lines: list[str]) -> None:
                 p.paragraph_format.space_after = Pt(2)
                 p.paragraph_format.space_before = Pt(2)
                 for run in p.runs:
-                    run.font.size = Pt(8)
+                    run.font.size = Pt(8.5)
     doc.add_paragraph().paragraph_format.space_after = Pt(0)
 
 
@@ -181,49 +181,58 @@ def build() -> None:
     styles = doc.styles
     normal = styles["Normal"]
     normal.font.name = "宋体"
-    normal.font.size = Pt(9)
+    normal.font.size = Pt(10)
     normal._element.rPr.rFonts.set(qn("w:eastAsia"), "宋体")
-    normal.paragraph_format.line_spacing = 1.13
-    normal.paragraph_format.space_after = Pt(3)
+    normal.paragraph_format.line_spacing = 1.16
+    normal.paragraph_format.space_after = Pt(4)
     for idx, size in ((1, 16), (2, 13), (3, 10.5)):
         style = styles[f"Heading {idx}"]
         style.font.name = "微软雅黑"
         style.font.size = Pt(size)
         style.font.bold = True
-        style.font.color.rgb = RGBColor(21, 67, 114)
+        style.font.color.rgb = RGBColor(0, 0, 0)
         style._element.rPr.rFonts.set(qn("w:eastAsia"), "微软雅黑")
         style.paragraph_format.space_before = Pt(14 if idx == 1 else 8)
         style.paragraph_format.space_after = Pt(6 if idx == 1 else 4)
     for name in ("List Bullet", "List Number"):
         styles[name].font.name = "宋体"
-        styles[name].font.size = Pt(9)
+        styles[name].font.size = Pt(10)
         styles[name].paragraph_format.space_after = Pt(2)
-    title = doc.add_paragraph()
+    title_style = styles["Title"]
+    title_style.font.name = "微软雅黑"
+    title_style._element.rPr.rFonts.set(qn("w:eastAsia"), "微软雅黑")
+    title_style.font.size = Pt(22)
+    title_style.font.bold = True
+    title_style.font.color.rgb = RGBColor(0, 0, 0)
+    title_ppr = title_style._element.get_or_add_pPr()
+    for border in title_ppr.findall(qn("w:pBdr")):
+        title_ppr.remove(border)
+    title = doc.add_paragraph(style="Title")
     title.alignment = WD_ALIGN_PARAGRAPH.CENTER
     title.paragraph_format.space_before = Pt(120)
     r = title.add_run("OvO 学术成果分享平台\n软件需求规格说明书")
     r.bold = True
     r.font.name = "微软雅黑"
     r.font.size = Pt(22)
-    r.font.color.rgb = RGBColor(21, 67, 114)
+    r.font.color.rgb = RGBColor(0, 0, 0)
     meta = doc.add_paragraph()
     meta.alignment = WD_ALIGN_PARAGRAPH.CENTER
     meta.paragraph_format.space_before = Pt(40)
-    meta.add_run("V0.3 · 提交评审稿\n2026 年 10 月 12 日\nOvO 小组").font.size = Pt(12)
-    doc.add_paragraph("成员复核与共同冻结：待团队签认。图模按本阶段安排后补，本版仅交付文字规格。")
+    meta.add_run("V0.4 · 提交评审稿\n2026 年 10 月 12 日\nOvO 小组").font.size = Pt(12)
+    doc.add_paragraph("组号、成员分工、成员复核与共同冻结：待团队填写或签认。两张状态图已有图源，其他图与CodeArts一致性仍待核验。")
     doc.add_page_break()
-    p = doc.add_paragraph("目录", style="Heading 1")
+    p = doc.add_paragraph("文档结构", style="Heading 1")
     p.paragraph_format.space_after = Pt(10)
     for text in (
         "1 引言", "2 系统总体说明", "3 用例模型", "4 功能需求规格", "5 创新与可选需求",
         "6 业务流程与状态模型", "7 数据需求与业务规则", "8 权限与安全需求", "9 非功能需求", "10 验收与追踪",
     ):
         doc.add_paragraph(text)
-    doc.add_paragraph("各章详细子需求、用例与追踪矩阵紧随所属章节；页码以 Word 更新目录后为准。")
+    doc.add_paragraph("各章详细子需求、用例与追踪矩阵紧随所属章节。可使用 Word 导航窗格按标题定位。")
     doc.add_page_break()
     add_bundle(doc)
     header = sec.header.paragraphs[0]
-    header.text = "OvO 学术成果分享平台  |  SRS V0.3"
+    header.text = "OvO 学术成果分享平台  |  SRS V0.4"
     header.alignment = WD_ALIGN_PARAGRAPH.RIGHT
     header.runs[0].font.color.rgb = RGBColor(95, 110, 125)
     header.runs[0].font.size = Pt(8)
