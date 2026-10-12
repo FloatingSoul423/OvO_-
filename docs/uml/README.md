@@ -15,6 +15,15 @@
 | --- | --- | --- |
 | DGM-USECASE-02 | [账号与门户管理局部用例图](account-portal/DGM-USECASE-02-account-portal-management.puml) | FR04～FR07、UC-04～UC-08；注册登录、门户认领与审核、门户维护、成果关系维护 |
 
+## 成员图稿
+
+| 图号 | 图稿 | 当前状态 |
+| --- | --- | --- |
+| DGM-STATE-01 | [数据采集任务状态图](collection-state/README.md) | sxh 已提交原始 CodeArts SVG/PNG，以及按 SRS 补齐的 PlantUML 图源与导出图；CodeArts 原图待同步微调 |
+| DGM-STATE-02 | [认领申请状态图](claim-state/README.md) | sxh 已提交 CodeArts XMI、原始导入包，以及按 SRS 补齐的 PlantUML 图源与导出图；CodeArts 状态迁移标注待同步 |
+
+[CodeArts 原始导入包清单](codearts/README.md)汇总小组提供的六份基础 ZIP，并区分可导入 ZIP 与 XMI 导出。
+
 ## 文件与工具
 
 - 图源使用 PlantUML `.puml`，导出 SVG，必要时导出 PNG；

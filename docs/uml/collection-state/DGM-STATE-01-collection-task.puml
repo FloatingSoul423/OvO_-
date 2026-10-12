@@ -1,0 +1,42 @@
+@startuml
+title DGM-STATE-01 数据采集任务状态图
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam state {
+  BackgroundColor #FFF5E8
+  BorderColor #6B7280
+  FontColor #1F2937
+}
+
+[*] --> 待执行 : 创建任务且配置校验通过
+
+待执行 --> 运行中 : 管理员启动 [来源已登记且获准]\n建立执行上下文
+待执行 --> 已停止 : 启动前停止\n记录停止原因
+
+运行中 --> 成功 : 计划范围处理完成\n保存摘要与检查点
+运行中 --> 失败 : 来源不可用或处理异常\n记录失败原因与已处理范围
+运行中 --> 已停止 : 管理员停止\n保留已成功数据和检查点
+
+失败 --> 重试 : 管理员发起重试
+重试 --> 运行中 : 恢复校验通过\n从安全检查点继续
+重试 --> 失败 : 恢复校验失败或来源仍不可用\n记录原因
+
+成功 --> [*]
+已停止 --> [*]
+
+note right of 重试
+  重复输入按幂等规则处理；
+  不重复创建业务实体。
+end note
+
+note bottom of 已停止
+  本任务为终态；如需再次采集，
+  应创建新任务，保留旧任务历史。
+end note
+
+legend bottom
+  依据：FR08、FR10、UC-09、SRS V0.3 状态登记表 2.5。
+  禁止：待执行→成功；失败→成功；成功/已停止→运行中。
+endlegend
+@enduml

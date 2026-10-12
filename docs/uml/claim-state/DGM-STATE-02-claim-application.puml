@@ -1,0 +1,36 @@
+@startuml
+title DGM-STATE-02 认领申请状态图
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam state {
+  BackgroundColor #EAF3FF
+  BorderColor #537494
+  FontColor #1F2937
+}
+
+[*] --> 待审核 : 登录用户提交完整申请\n通过字段与重复申请校验
+
+待审核 --> 待补充 : 审核认为证据不足\n管理员说明所需材料
+待补充 --> 待审核 : 申请人补充且校验通过\n重新进入审核
+
+待审核 --> 已通过 : 管理员核验通过 [无未解决冲突]\n建立目标门户授权并审计
+待审核 --> 已驳回 : 管理员驳回\n记录理由，不新增授权
+
+已通过 --> [*]
+已驳回 --> [*]
+
+note bottom of 待补充
+  不直接转入已通过或已驳回；
+  申请补充完整后回到待审核。
+end note
+
+note right of 已通过
+  本申请为终态；门户授权是另一个业务对象。
+end note
+
+legend bottom
+  依据：FR05、UC-05、UC-06、SRS V0.3 状态登记表 2.2。
+  已驳回后重新申请须另建记录；有未解决冲突时不得通过。
+endlegend
+@enduml
