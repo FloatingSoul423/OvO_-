@@ -5,6 +5,8 @@ temp/
 *.tmp
 *.bak
 *.zip
+# Course-required editable CodeArts import packages are deliberate source artifacts.
+!docs/uml/codearts/import-packages/*.zip
 
 # Credentials and machine-specific configuration
 .env

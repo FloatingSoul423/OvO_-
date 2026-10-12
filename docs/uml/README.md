@@ -20,6 +20,9 @@
 | 图号 | 图稿 | 当前状态 |
 | --- | --- | --- |
 | DGM-STATE-01 | [数据采集任务状态图](collection-state/README.md) | sxh 已提交原始 CodeArts SVG/PNG，以及按 SRS 补齐的 PlantUML 图源与导出图；CodeArts 原图待同步微调 |
+| DGM-STATE-02 | [认领申请状态图](claim-state/README.md) | sxh 已提交 CodeArts XMI、原始导入包，以及按 SRS 补齐的 PlantUML 图源与导出图；CodeArts 状态迁移标注待同步 |
+
+[CodeArts 原始导入包清单](codearts/README.md)汇总小组提供的六份基础 ZIP，并区分可导入 ZIP 与 XMI 导出。
 
 ## 文件与工具
 
