@@ -15,6 +15,12 @@
 | --- | --- | --- |
 | DGM-USECASE-02 | [账号与门户管理局部用例图](account-portal/DGM-USECASE-02-account-portal-management.puml) | FR04～FR07、UC-04～UC-08；注册登录、门户认领与审核、门户维护、成果关系维护 |
 
+## 成员图稿
+
+| 图号 | 图稿 | 当前状态 |
+| --- | --- | --- |
+| DGM-STATE-01 | [数据采集任务状态图](collection-state/README.md) | sxh 已提交原始 CodeArts SVG/PNG，以及按 SRS 补齐的 PlantUML 图源与导出图；CodeArts 原图待同步微调 |
+
 ## 文件与工具
 
 - 图源使用 PlantUML `.puml`，导出 SVG，必要时导出 PNG；
