@@ -2,14 +2,16 @@
 
 ## 当前成果入口
 
-- [SRS V0.1 总入口](OvO-SRS-Draft.md)
+- [SRS V0.3 总入口](OvO-SRS-Draft.md)
+- [SRS V0.3 Word 合订版](OvO-SRS-V0.3.docx)（与 Markdown 分册同一内容，供课程提交与审阅）
 - [系统级需求追踪矩阵](traceability-matrix.md)
 - [四个功能域及非功能需求](modules/README.md)
-- [SRS 质量检查报告](../reports/srs-quality-report-2026-10-11.md)
+- [最新文档复核与修改记录](../reports/srs-review-2026-10-12.md)
+- [124条子需求逐条追踪](subrequirement-traceability.md)
 
 ## 当前目标
 
-本组 SRS V0.1 初稿已完成：FR01～FR16、IN01、NF01～NF08 均已具备参与者、条件、流程、权限/规则和可测试验收条件，并能回溯 V1.9。当前任务是组内评审、处理待确认事项并形成可冻结版本。
+本组 V0.3 已重写逐条业务场景、287个AC、15个完整用例及权限状态规则。当前为提交评审稿，需团队签认；四张图按本轮要求后补。不能以字段检查代替业务评审或宣布课程材料全部完成。
 
 ## 建议结构
 

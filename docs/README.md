@@ -5,7 +5,7 @@
 | 项目管理 | [当前进度与阶段计划](project-management/current-status.md) | 2026-10-11 基线 |
 | 需求调研 | [调研成果说明](research/README.md) | 仅现成调研统计报告完成 |
 | 需求基线 | [V1.9 基线引用](requirements/baseline-reference.md) | 共同工作输入，待正式冻结确认 |
-| SRS | [SRS V0.2 总入口](srs/OvO-SRS-Draft.md) | 124 条子需求完整规格、15 个独立用例、横切矩阵与追踪矩阵已形成，待评审 |
+| SRS | [SRS V0.3 总入口](srs/OvO-SRS-Draft.md) | 124条独立场景、287个AC、15用例、横切规则及逐条追踪；待成员签认，图模后补 |
 | 核心规则 SPEC | [SPEC 工作说明](spec/README.md) | 待分工与编写 |
 | UML | [图模清单与规范](uml/README.md) | 四张必需图待完成 |
 | 评审与汇报 | [评审材料说明](reports/README.md) | 待准备 |

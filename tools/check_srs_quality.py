@@ -1,148 +1,84 @@
-"""Reproducible structural checks for the V0.2 SRS specification layer."""
+"""Document checks: coverage, unique definitions, trace edges and known regressions.
 
-from __future__ import annotations
-
+This verifies documents, not the future product. Semantic review remains explicit.
+"""
+import json
 import re
-from collections import Counter, defaultdict
 from pathlib import Path
+from collections import Counter
+from build_srs_review import ROOT,SRS,MODULES,DETAILS,INPUTS,CRITICAL,LINKS,parse_rows,associations
+from srs_cases import load_cases
 
-from build_srs_details import CRITICAL
+def main():
+    cases=load_cases()
+    detail_paths=[DETAILS/dest for _,dest,_ in INPUTS]
+    normative=[SRS/'OvO-SRS-Draft.md',SRS/'business-rules.md',SRS/'data-and-rules.md',SRS/'use-case-specifications.md',SRS/'cross-cutting-matrices.md',SRS/'traceability-matrix.md',SRS/'subrequirement-traceability.md',*detail_paths]
+    definitions={}
+    whole=''
+    fields=['需求描述','前置条件','触发条件','主成功流程','备选流程','异常流程','输入/业务数据','输出/可观察结果','状态变化','权限规则','业务规则','验收条件','关联项']
+    for path in detail_paths:
+        text=path.read_text(encoding='utf-8');whole+=text
+        for block in re.split(r'(?=^## (?:FR\d{2}|IN01|NF\d{2})-S\d{2} )',text,flags=re.M)[1:]:
+            req=re.match(r'## (\S+)',block).group(1)
+            assert req not in definitions,f'duplicate requirement {req}'
+            definitions[req]=block
+            for field in fields: assert f'### {field}\n\n' in block,(req,field)
+            assert re.search(r'^1\. .+\n2\. .+\n3\. ',block,re.M),(req,'missing concrete steps')
+            ac=re.findall(r'^- (AC-[\w-]+)：Given (.+)，When (.+)，Then (.+)',block,re.M)
+            assert len(ac)==(3 if req in CRITICAL else 2),(req,'AC count')
+            assert all(a.startswith('AC-'+req+'-') for a,*_ in ac),(req,'foreign AC')
+            assert all(v.strip() for a,g,w,t in ac for v in (g,w,t)),(req,'empty GWT')
+            assert cases[req]['given'] in block and cases[req]['then'] in block,(req,'fixture missing')
+    expected={r for src,_,_ in INPUTS for r,_ in parse_rows(MODULES/src)}
+    assert set(definitions)==expected==set(cases)
+    assert len(expected)==124 and sum(r.startswith('NF') for r in expected)==17
+    assert {r.split('-')[0] for r in expected}==set(LINKS)
+    acs=re.findall(r'^- (AC-[\w-]+)：',whole,re.M)
+    assert len(acs)==len(set(acs))==287
+    # Indexes must not carry duplicate normative acceptance definitions.
+    for src,_,_ in INPUTS:
+        assert not re.search(r'^- (?:\*\*)?AC-',(MODULES/src).read_text(encoding='utf-8'),re.M)
+    uc=(SRS/'use-case-specifications.md').read_text(encoding='utf-8')
+    blocks=re.split(r'(?=^## UC-\d{2} )',uc,flags=re.M)[1:]
+    assert len(blocks)==15
+    for i,block in enumerate(blocks,1):
+        assert block.startswith(f'## UC-{i:02d} ')
+        for label in ['目标','对应需求','主要参与者','次要参与者','前置条件','触发事件']:
+            assert f'**{label}：**' in block,(i,label)
+        for label in ['主成功场景','备选与异常场景','后置条件','业务规则','关联状态']:
+            assert f'### {label}' in block,(i,label)
+        steps=set(re.findall(r'^\d+\. (M\d+)：',block,re.M))
+        anchors=re.findall(r'^- B\d+（(M\d+)）：',block,re.M)
+        assert len(anchors)>=2 and set(anchors)<=steps,(i,'bad branch anchor')
+    trace=(SRS/'subrequirement-traceability.md').read_text(encoding='utf-8')
+    for req in expected:
+        row=[r for r in trace.splitlines() if f'[{req}](' in r]
+        assert len(row)==1,(req,'trace missing')
+        for ac in re.findall(r'^- (AC-[\w-]+)：',definitions[req],re.M): assert ac in row[0]
+        for linked in associations(req)[0]: assert linked in row[0]
+    # Known V0.2 semantic regressions.
+    assert '注册不依赖登录' in definitions['FR04-S01']
+    assert '无需先选择两名学者' in definitions['IN01-S01']
+    assert '不返回A' in definitions['FR01-S01']
+    assert '9999' in definitions['FR16-S06']
+    assert '已通过但无授权' in definitions['FR05-S05']
+    for phrase in ['系统应完成该可观察能力','与本条相关的结果','且本条能力被调用','必要时更新业务状态']:
+        assert phrase not in whole,phrase
+    # Verify local links and explicit anchors, including all 124 item-level edges.
+    for path in normative:
+        text=path.read_text(encoding='utf-8')
+        for target in re.findall(r'\[[^\]]+\]\(([^)]+)\)',text):
+            if re.match(r'(https?://|#)',target):continue
+            link,_,anchor=target.partition('#'); dest=(path.parent/link).resolve()
+            assert dest.exists(),(str(path),target)
+            if anchor: assert f'id="{anchor}"' in dest.read_text(encoding='utf-8'),target
+    stats=dict(normative_files=len(normative),physical_lines=0,nonblank_lines=0,nonspace_chars=0,han_chars=0,requirements=124,function_innovation=107,nf=17,ac=287,use_cases=15,diagrams='deferred by user')
+    for path in normative:
+        text=path.read_text(encoding='utf-8'); lines=text.splitlines()
+        stats['physical_lines']+=len(lines);stats['nonblank_lines']+=sum(bool(x.strip()) for x in lines)
+        stats['nonspace_chars']+=len(re.sub(r'\s','',text));stats['han_chars']+=len(re.findall(r'[\u3400-\u9fff]',text))
+    print('PASS: document structural checks; not a product acceptance result')
+    print(json.dumps(stats,ensure_ascii=False,indent=2))
+    return stats
 
-
-ROOT = Path(__file__).resolve().parents[1]
-SRS = ROOT / "docs" / "srs"
-MODULES = SRS / "modules"
-DETAILS = MODULES / "detailed"
-
-OVERVIEWS = [
-    MODULES / "01-search-and-portal.md",
-    MODULES / "02-account-claim-maintenance.md",
-    MODULES / "03-collection-governance.md",
-    MODULES / "04-analytics-admin-innovation.md",
-    MODULES / "nonfunctional.md",
-]
-DETAIL_FILES = [
-    DETAILS / "01-search-and-portal-detailed.md",
-    DETAILS / "02-account-claim-maintenance-detailed.md",
-    DETAILS / "03-collection-governance-detailed.md",
-    DETAILS / "04-analytics-admin-innovation-detailed.md",
-    DETAILS / "nonfunctional-detailed.md",
-]
-NORMATIVE = [
-    SRS / "OvO-SRS-Draft.md",
-    SRS / "traceability-matrix.md",
-    SRS / "use-case-specifications.md",
-    SRS / "cross-cutting-matrices.md",
-    *OVERVIEWS,
-    *DETAIL_FILES,
-]
-
-REQ = re.compile(r"(?:FR\d{2}|IN01|NF\d{2})-S\d{2}")
-DETAIL_HEADING = re.compile(r"^## ((?:FR\d{2}|IN01|NF\d{2})-S\d{2}) ", re.M)
-AC_DEFINITION = re.compile(r"^- (?:\*\*)?(AC-((?:FR\d{2}|IN01|NF\d{2})-S\d{2})-\d{2})", re.M)
-
-
-def fail(message: str) -> None:
-    raise SystemExit(f"FAIL: {message}")
-
-
-def main() -> None:
-    for path in NORMATIVE:
-        if not path.is_file():
-            fail(f"missing normative file: {path.relative_to(ROOT)}")
-        text = path.read_text(encoding="utf-8")
-        for target in re.findall(r"\[[^\]]+\]\(([^)]+)\)", text):
-            if re.match(r"^(?:https?://|#)", target):
-                continue
-            local_target = target.split("#", 1)[0]
-            if local_target and not (path.parent / local_target).resolve().exists():
-                fail(f"broken local link in {path.relative_to(ROOT)}: {target}")
-
-    overview_ids = set()
-    for path in OVERVIEWS:
-        for line in path.read_text(encoding="utf-8").splitlines():
-            if line.startswith("|"):
-                first = line.strip().strip("|").split("|", 1)[0].strip()
-                if REQ.fullmatch(first):
-                    overview_ids.add(first)
-
-    detail_ids = []
-    detail_text = "\n".join(path.read_text(encoding="utf-8") for path in DETAIL_FILES)
-    detail_ids.extend(DETAIL_HEADING.findall(detail_text))
-    if len(detail_ids) != 124 or len(set(detail_ids)) != 124:
-        fail(f"expected 124 unique detail headings, got {len(detail_ids)}/{len(set(detail_ids))}")
-    if set(detail_ids) != overview_ids:
-        fail(f"overview/detail ID mismatch: missing={sorted(overview_ids-set(detail_ids))}, extra={sorted(set(detail_ids)-overview_ids)}")
-
-    functional = [item for item in detail_ids if not item.startswith("NF")]
-    nonfunctional = [item for item in detail_ids if item.startswith("NF")]
-    if len(functional) != 107 or len(nonfunctional) != 17:
-        fail(f"expected 107 function/innovation and 17 NF, got {len(functional)} and {len(nonfunctional)}")
-
-    for field in [
-        "| 需求描述 |", "| 前置条件 |", "| 触发条件 |", "| 输入/业务数据 |",
-        "| 输出/可观察结果 |", "| 状态变化 |", "| 权限规则 |", "| 业务规则 |",
-        "| 备选流程 |", "| 异常流程 |", "### 主成功流程", "### 验收条件", "### 关联项",
-    ]:
-        count = detail_text.count(field)
-        if count != 124:
-            fail(f"field {field!r} expected 124 occurrences, got {count}")
-
-    definition_text = "\n".join(path.read_text(encoding="utf-8") for path in [*OVERVIEWS, *DETAIL_FILES])
-    definitions = AC_DEFINITION.findall(definition_text)
-    ac_ids = [item[0] for item in definitions]
-    if len(ac_ids) != len(set(ac_ids)):
-        duplicates = [item for item, count in Counter(ac_ids).items() if count > 1]
-        fail(f"duplicate AC definitions: {duplicates}")
-    by_req = defaultdict(list)
-    for ac_id, req_id in definitions:
-        by_req[req_id].append(ac_id)
-    missing_ac = sorted(set(detail_ids) - set(by_req))
-    if missing_ac:
-        fail(f"requirements without AC definition: {missing_ac}")
-    excessive_ac = sorted((req_id, len(items)) for req_id, items in by_req.items() if len(items) > 3)
-    if excessive_ac:
-        fail(f"requirements with more than three ACs: {excessive_ac}")
-    bad_critical = sorted((req_id, len(by_req[req_id])) for req_id in CRITICAL if len(by_req[req_id]) not in {2, 3})
-    if bad_critical:
-        fail(f"critical requirements must have two or three ACs: {bad_critical}")
-
-    uc_text = (SRS / "use-case-specifications.md").read_text(encoding="utf-8")
-    use_cases = re.findall(r"^## (UC-\d{2}) ", uc_text, re.M)
-    expected_uc = [f"UC-{index:02d}" for index in range(1, 16)]
-    if use_cases != expected_uc:
-        fail(f"use-case sections are not exactly UC-01..UC-15: {use_cases}")
-
-    matrix_text = (SRS / "cross-cutting-matrices.md").read_text(encoding="utf-8")
-    for heading in ["## 1. 权限矩阵", "## 2. 状态登记表", "## 3. 业务规则适用矩阵"]:
-        if heading not in matrix_text:
-            fail(f"missing matrix section: {heading}")
-    for number in range(1, 21):
-        if f"BR-{number:02d}" not in matrix_text:
-            fail(f"BR-{number:02d} absent from cross-cutting matrix")
-
-    physical_lines = 0
-    nonblank_lines = 0
-    nonspace_chars = 0
-    han_chars = 0
-    for path in NORMATIVE:
-        text = path.read_text(encoding="utf-8")
-        lines = text.splitlines()
-        physical_lines += len(lines)
-        nonblank_lines += sum(bool(line.strip()) for line in lines)
-        nonspace_chars += len(re.sub(r"\s", "", text))
-        han_chars += len(re.findall(r"[\u3400-\u9fff]", text))
-
-    print("PASS: SRS V0.2 structural quality checks")
-    print(f"normative_files={len(NORMATIVE)}")
-    print(f"physical_lines={physical_lines}")
-    print(f"nonblank_lines={nonblank_lines}")
-    print(f"nonspace_chars={nonspace_chars}")
-    print(f"han_chars={han_chars}")
-    print(f"detailed_requirements={len(detail_ids)} (function_innovation={len(functional)}, nf={len(nonfunctional)})")
-    print(f"unique_ac_definitions={len(ac_ids)}")
-    print(f"use_case_specifications={len(use_cases)}")
-
-
-if __name__ == "__main__":
-    main()
+if __name__=='__main__':main()

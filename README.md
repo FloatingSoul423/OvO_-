@@ -14,7 +14,7 @@
 
 - 已完成：现成调研统计报告（公开研究的二手汇编）。
 - 已建立：项目目录、阶段边界、需求基线入口、SRS/UML/SPEC 工作规范和进度计划。
-- 已形成初稿：[SRS V0.2](docs/srs/OvO-SRS-Draft.md)、107 条功能/创新子需求、17 条非功能子需求、[15 个独立用例规约](docs/srs/use-case-specifications.md)、[横切规格矩阵](docs/srs/cross-cutting-matrices.md)和[系统级追踪矩阵](docs/srs/traceability-matrix.md)。
+- 已形成提交评审稿：[SRS V0.3](docs/srs/OvO-SRS-Draft.md)、124条独立子需求场景、287个验收条件、[15个完整用例](docs/srs/use-case-specifications.md)、[横切矩阵](docs/srs/cross-cutting-matrices.md)与[逐条追踪](docs/srs/subrequirement-traceability.md)。[本轮复核记录](docs/reports/srs-review-2026-10-12.md)说明旧版缺陷、修订及剩余签认项。
 - 待完成：需求调研主报告、SRS 组内评审与冻结、规定 UML 图、SPEC、PPT 及通用提交材料。
 
 统计报告仅是需求调研的辅助证据，不能替代调研方案、执行记录、三类用户诉求、边界与优先级分析。
