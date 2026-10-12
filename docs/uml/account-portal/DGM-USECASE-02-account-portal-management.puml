@@ -1,0 +1,117 @@
+@startuml DGM-USECASE-02-account-portal-management
+!pragma layout smetana
+
+title DGM-USECASE-02 账号与门户管理局部用例图\nFR04～FR07 / UC-04～UC-08
+
+left to right direction
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName "Microsoft YaHei"
+skinparam defaultFontSize 14
+skinparam ArrowColor #333333
+skinparam ArrowThickness 1.2
+skinparam ActorBorderColor #808080
+skinparam ActorBackgroundColor #FFE6CC
+skinparam ActorFontColor #333333
+skinparam UsecaseBorderColor #808080
+skinparam UsecaseBackgroundColor #A9C4EB
+skinparam UsecaseFontColor #202020
+skinparam UsecaseFontSize 13
+skinparam RectangleBorderColor #808080
+skinparam RectangleBackgroundColor #FFFFFF
+skinparam RectangleFontColor #333333
+skinparam RectangleFontStyle bold
+skinparam NoteBorderColor #C9A227
+skinparam NoteBackgroundColor #FFF6CC
+skinparam NoteFontColor #333333
+skinparam linetype ortho
+
+actor "访客" as Guest #FFE6CC
+actor "登录用户" as User #FFE6CC
+actor "门户管理者" as PortalManager #FFE6CC
+actor "管理员" as Admin #FFE6CC
+
+PortalManager -|> User
+
+rectangle "OvO 学术成果分享平台\n账号与门户管理（FR04～FR07）" as SystemBoundary {
+  rectangle "账号与访问（FR04 / UC-04）" as AccountArea {
+    usecase "注册账号" as Register
+    usecase "登录" as Login
+    usecase "退出" as Logout
+  }
+
+  rectangle "门户认领（FR05 / UC-05、UC-06）" as ClaimArea {
+    usecase "提交门户认领申请\n与必要证明" as SubmitClaim
+    usecase "补充认领材料" as SupplementClaim
+    usecase "查看本人申请状态\n与处理结果" as TrackClaim
+
+    usecase "审核门户认领" as ReviewClaim
+    usecase "要求补充" as RequestSupplement
+    usecase "通过并授予\n目标门户权限" as ApproveClaim
+    usecase "驳回并记录原因" as RejectClaim
+    usecase "处理冲突认领" as ResolveConflict
+  }
+
+  rectangle "门户维护（FR06 / UC-07）" as PortalArea {
+    usecase "修改展示设置" as EditDisplay
+    usecase "提交事实字段变更" as SubmitProfileChange
+    usecase "查看提交状态\n与公开版本" as TrackProfileChange
+    usecase "审核门户重要字段变更" as ReviewProfileChange
+  }
+
+  rectangle "成果关系维护（FR07 / UC-08）" as PublicationArea {
+    usecase "确认候选成果关系" as ConfirmPublication
+    usecase "补录已有成果\n及可核验来源" as AddPublication
+    usecase "提交纠错或\n解除本人关联" as CorrectPublication
+    usecase "查看成果变更状态" as TrackPublicationChange
+    usecase "审核成果变更" as ReviewPublicationChange
+  }
+}
+
+Guest --> Register
+Guest --> Login
+User --> Logout
+
+User --> SubmitClaim
+User --> SupplementClaim
+User --> TrackClaim
+
+Admin -left-> ReviewClaim
+RequestSupplement ..> ReviewClaim : <<extend>>
+ApproveClaim ..> ReviewClaim : <<extend>>
+RejectClaim ..> ReviewClaim : <<extend>>
+ResolveConflict ..> ReviewClaim : <<extend>>
+SupplementClaim ..> SubmitClaim : <<extend>>
+
+PortalManager --> EditDisplay
+PortalManager --> SubmitProfileChange
+PortalManager --> TrackProfileChange
+Admin -left-> ReviewProfileChange
+
+PortalManager --> ConfirmPublication
+PortalManager --> AddPublication
+PortalManager --> CorrectPublication
+PortalManager --> TrackPublicationChange
+Admin -left-> ReviewPublicationChange
+
+SubmitProfileChange ..> ReviewProfileChange : 提交待审
+AddPublication ..> ReviewPublicationChange : 提交待审
+CorrectPublication ..> ReviewPublicationChange : 提交待审
+
+legend left
+  |= 线型 |= 含义 |
+  | 实线 | 参与者与用例关联 |
+  | 空心三角实线 | 门户管理者是登录用户的特化角色 |
+  | 虚线 <<extend>> | 在特定审核结果或补充条件下发生 |
+  | “提交待审”虚线 | 请求进入对应管理员审核流程 |
+  --
+  **关键规则**
+  * 认领通过与授予目标门户权限构成同一成功结果，未解决冲突不得通过。
+  * 展示设置可直接生效；姓名、机构、简介、领域等事实字段审核后公开。
+  * 解除本人关系不删除成果实体、来源记录或其他参与者关系。
+endlegend
+
+footer 依据：SRS V0.3 FR04～FR07、UC-04～UC-08、BR-01～BR-10、BR-18～BR-19
+
+@enduml

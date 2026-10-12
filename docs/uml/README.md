@@ -9,6 +9,12 @@
 | DGM-STATE-01 | 数据采集任务状态图 | 待执行、运行中、成功、失败、重试、已停止 |
 | DGM-STATE-02 | 认领申请状态图 | 待审核、待补充、已通过、已驳回 |
 
+## 局部展开图
+
+| 图号 | 图 | 覆盖 |
+| --- | --- | --- |
+| DGM-USECASE-02 | [账号与门户管理局部用例图](account-portal/DGM-USECASE-02-account-portal-management.puml) | FR04～FR07、UC-04～UC-08；注册登录、门户认领与审核、门户维护、成果关系维护 |
+
 ## 文件与工具
 
 - 图源使用 PlantUML `.puml`，导出 SVG，必要时导出 PNG；
