@@ -1,0 +1,63 @@
+@startuml
+title DGM-ACTIVITY-02 学者身份与成果归属核验\nFR15 / UC-08、UC-10
+skinparam defaultFontName "Microsoft YaHei"
+skinparam shadowing false
+skinparam backgroundColor white
+
+|系统|
+start
+:接收身份线索或成果关系治理请求;
+if (门户管理者提交本人意见？) then (是)
+  |门户管理者|
+  :提交确认、补录、纠错或解除意见;
+  |系统|
+  if (账号及目标门户授权有效？) then (否)
+    :拒绝越权操作，公开版本不变;
+    stop
+  else (是)
+    if (无冲突且仅为本人确认？) then (是)
+      :仅标记本人成果关系确认;
+    else (否)
+      :进入审核队列，待审意见不覆盖公开版本;
+    endif
+  endif
+endif
+:保留姓名原文、别名、机构时间、外部 ID 作用域及来源;
+:核对稳定 ID、冲突与人工排除记录;
+if (同域稳定 ID 一致且证据充分、无强冲突？) then (是)
+  :确认统一身份引用并保留判定依据;
+else (否)
+  :保持独立身份或登记待核验候选;
+endif
+|治理管理员|
+:查看待办并核验证据;
+|系统|
+if (治理权限有效且目标版本未变化？) then (否)
+  :拒绝过时决定，原结果不变;
+  stop
+else (是)
+endif
+|治理管理员|
+:决定确认、排除、改归属或拆分身份;
+|系统|
+if (与已授权门户身份冲突？) then (是)
+  :转入争议，不静默转移门户授权;
+  stop
+else (否)
+endif
+if (证据足以支持决定？) then (否)
+  :保持待核验并列出补证缺口;
+  stop
+else (是)
+  :执行决定，保留关系角色、顺序与来源;
+  :审计前后值、原因和操作者;
+  :更新门户、检索、统计与合作网络;
+  if (公开视图已同步？) then (否)
+    :显示旧版本时间及未同步状态，安排重试;
+  else (是)
+    :反馈生效结果及当前版本;
+  endif
+endif
+stop
+footer 依据：成员 D CodeArts XMI 的身份核验流程；SRS V0.4 FR15、UC-08、UC-10，需成员复核
+@enduml

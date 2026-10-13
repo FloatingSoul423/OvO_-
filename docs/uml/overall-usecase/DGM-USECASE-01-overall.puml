@@ -1,0 +1,72 @@
+@startuml
+title DGM-USECASE-01 系统总体用例图\nUC-01～UC-15 / FR01～FR16、IN01
+left to right direction
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName "Microsoft YaHei"
+skinparam defaultFontSize 15
+skinparam actorStyle stickman
+skinparam usecase {
+  BackgroundColor #EAF3FF
+  BorderColor #537494
+}
+
+actor "访客" as Guest
+actor "登录用户" as User
+actor "门户管理者" as Owner
+actor "管理员" as Admin
+actor "外部数据来源" as Source
+Owner -|> User
+
+rectangle "OvO 学术成果分享平台" {
+  package "公开检索与分析" {
+    usecase "UC-01\n检索成果与学者" as UC01
+    usecase "UC-02\n查看成果详情与来源" as UC02
+    usecase "UC-03\n查看学者门户" as UC03
+    usecase "UC-11\n查看统计与机构排名" as UC11
+    usecase "UC-12\n查看专家合作网络" as UC12
+    usecase "UC-13\n查看领域热点" as UC13
+    usecase "UC-15\n探索合作关系" as UC15
+  }
+  package "账号与门户" {
+    usecase "UC-04\n管理账号与访问权限" as UC04
+    usecase "UC-05\n提交并跟踪门户认领" as UC05
+    usecase "UC-06\n审核门户认领" as UC06
+    usecase "UC-07\n维护学者门户" as UC07
+    usecase "UC-08\n确认、补录与纠正成果" as UC08
+  }
+  package "采集与治理" {
+    usecase "UC-09\n管理采集任务" as UC09
+    usecase "UC-10\n治理成果与学者关系" as UC10
+    usecase "UC-14\n管理后台与审计" as UC14
+  }
+}
+
+Guest --> UC01
+Guest --> UC02
+Guest --> UC03
+Guest --> UC11
+Guest --> UC12
+Guest --> UC13
+Guest --> UC15
+User --> UC04
+User --> UC05
+Owner --> UC07
+Owner --> UC08
+Admin --> UC06
+Admin --> UC09
+Admin --> UC10
+Admin --> UC14
+Source --> UC09
+
+note bottom of UC05
+  认领提交不等于通过；
+  审核成功才授予目标门户权限。
+end note
+note bottom of UC10
+  不确定归属和重复候选
+  进入人工核验，不直接合并。
+end note
+
+footer 依据：SRS V0.4 用例规约 UC-01～UC-15；CodeArts 成员1 XMI 为原始图稿，关系方向待复核
+@enduml

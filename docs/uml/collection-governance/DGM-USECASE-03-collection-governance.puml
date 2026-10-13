@@ -1,0 +1,58 @@
+@startuml
+title DGM-USECASE-03 采集与成果治理局部用例图\nFR08～FR10、FR15～FR16
+left to right direction
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName "Microsoft YaHei"
+skinparam defaultFontSize 15
+skinparam usecase {
+  BackgroundColor #EAF3FF
+  BorderColor #537494
+}
+
+actor "管理员" as Admin
+actor "外部数据来源" as Source
+actor "门户管理者" as Owner
+
+rectangle "OvO 学术成果分享平台：采集与治理" {
+  package "来源与任务（FR08、FR10、FR16）" {
+    usecase "登记并维护\n获准数据来源" as RegisterSource
+    usecase "创建并配置采集任务" as CreateTask
+    usecase "启动、停止与重试任务" as RunTask
+    usecase "查看进度、失败原因与历史" as ViewTask
+    usecase "采集四类成果并保留\n原值、来源与游标" as Collect
+    usecase "追踪来源、时间、\n使用范围与数据性质" as Trace
+  }
+  package "清洗、更新与身份（FR09、FR10、FR15）" {
+    usecase "校验并规范化字段" as Clean
+    usecase "识别重复成果与版本候选" as Duplicate
+    usecase "识别新增、变更与来源失效" as Update
+    usecase "生成身份与成果关系候选" as Identify
+    usecase "送不确定项进入人工核验" as Queue
+    usecase "批准合并、拒绝候选、\n拆分或改归属" as Decide
+    usecase "记录证据、前后值、\n理由和操作者" as Audit
+    usecase "传播生效结果至各公开视图" as Publish
+  }
+  usecase "提交本人成果确认、\n补录或纠错意见" as SubmitOpinion
+}
+
+Admin --> RegisterSource
+Admin --> CreateTask
+Admin --> RunTask
+Admin --> ViewTask
+Admin --> Queue
+Admin --> Decide
+Source --> Collect
+Owner --> SubmitOpinion
+
+note bottom of Duplicate
+  稳定标识须比较类型和作用域；
+  仅标题相似不得自动合并。
+end note
+note bottom of Decide
+  人工决定须经权限和版本复核；
+  保留全部来源与审计历史。
+end note
+
+footer 依据：SRS V0.4 UC-08～UC-10、FR08～FR10、FR15～FR16；CodeArts 成员5 XMI 为原始图稿
+@enduml

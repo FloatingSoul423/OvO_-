@@ -36,7 +36,7 @@ note bottom of 已停止
 end note
 
 legend bottom
-  依据：FR08、FR10、UC-09、SRS V0.3 状态登记表 2.5。
+  依据：FR08、FR10、UC-09、SRS V0.4 状态登记表 2.5。
   禁止：待执行→成功；失败→成功；成功/已停止→运行中。
 endlegend
 @enduml

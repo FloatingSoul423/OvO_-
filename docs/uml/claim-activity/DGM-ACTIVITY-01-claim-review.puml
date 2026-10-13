@@ -1,0 +1,70 @@
+@startuml
+title DGM-ACTIVITY-01 门户认领审核活动图
+skinparam defaultFontName "Microsoft YaHei"
+skinparam shadowing false
+skinparam dpi 160
+
+|申请人|
+start
+:选择目标门户，提交本人声明和证明;
+|系统|
+:校验登录、材料完整性、目标状态;
+if (可受理？) then (否)
+  :返回缺失项或不合法原因;
+  note right: 不创建申请，不授予门户权限
+  stop
+else (是)
+  if (本人已有进行中申请？) then (是)
+    :返回原申请和状态，不重复创建;
+    stop
+  else (否)
+    :创建待审核申请;
+    :记录材料版本和已有授权冲突提示;
+  endif
+endif
+
+repeat
+  |审核管理员|
+  :核验证据、目标授权和冲突提示;
+  if (需补充材料？) then (是)
+    |系统|
+    :记录补充要求，申请转待补充;
+    |申请人|
+    :查看要求并补交本人材料;
+    |系统|
+    if (补充有效且未过期？) then (否)
+      :反馈问题，保持待补充并保留历史;
+      stop
+    else (是)
+      :保留历史材料，原申请转待审核;
+    endif
+  endif
+repeat while (本轮要求了补充？) is (是) not (否)
+
+|审核管理员|
+if (审核决定？) then (驳回)
+  :填写驳回理由;
+  |系统|
+  if (权限、版本和理由有效？) then (是)
+    :转已驳回，不授予权限;
+    :记录审计并通知申请人;
+  else (否)
+    :拒绝过时决定，原状态和授权不变;
+  endif
+else (拟通过)
+  if (冲突已解决？) then (否)
+    :人工核验争议;
+    |系统|
+    :保持待审核，原授权不变;
+  else (是或无冲突)
+    |系统|
+    if (权限、版本及授权复验通过？) then (是)
+      :原子登记已通过并授予目标门户权限;
+      :记录审计并通知申请人;
+    else (否)
+      :拒绝过时决定，原状态和授权不变;
+    endif
+  endif
+endif
+stop
+@enduml

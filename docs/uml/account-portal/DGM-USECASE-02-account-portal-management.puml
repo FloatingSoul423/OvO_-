@@ -112,6 +112,6 @@ legend left
   * 解除本人关系不删除成果实体、来源记录或其他参与者关系。
 endlegend
 
-footer 依据：SRS V0.3 FR04～FR07、UC-04～UC-08、BR-01～BR-10、BR-18～BR-19
+footer 依据：SRS V0.4 FR04～FR07、UC-04～UC-08、BR-01～BR-10、BR-18～BR-19
 
 @enduml

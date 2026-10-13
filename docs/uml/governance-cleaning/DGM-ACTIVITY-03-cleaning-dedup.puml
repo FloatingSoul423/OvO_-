@@ -1,0 +1,64 @@
+@startuml
+title DGM-ACTIVITY-03 成果清洗与去重治理\nFR09 / UC-10
+skinparam defaultFontName "Microsoft YaHei"
+skinparam shadowing false
+skinparam backgroundColor white
+
+|系统|
+start
+:接收来源记录、待核验候选或误合并请求;
+if (新来源记录？) then (是)
+  :保留原值、来源、时间，校验最小字段与日期;
+  if (字段、类型与日期合格？) then (否)
+    :登记字段异常，不发布不合格记录;
+    stop
+  else (是)
+    :规范化标题、标识和引用，保留规则版本;
+  endif
+  :比对稳定标识类型与作用域、版本及人工保护;
+  if (无冲突且规则允许自动归并？) then (是)
+    :关联同一成果实体，保留版本和全部来源;
+    :记录判定依据及映射，按实体计数;
+    stop
+  else (否)
+    :比较标题、年份、类型和参与者;
+    if (无候选且无未决冲突？) then (是)
+      :建立独立成果实体并保留来源;
+      stop
+    else (否)
+      :登记核验待办及冲突证据;
+    endif
+  endif
+else (否)
+  :读取候选或合并历史及来源映射;
+endif
+|治理管理员|
+:查看核验待办，比较证据;
+|系统|
+if (权限有效且目标版本未变化？) then (否)
+  :拒绝处理，保持现有结果;
+  stop
+else (是)
+endif
+|治理管理员|
+:作出排除、合并、关联版本或拆分决定;
+|系统|
+if (排除候选？) then (是)
+  :保留原实体与全部来源;
+else (否)
+  if (合并或关联版本且证据充分？) then (是)
+    :保留人工确认值、来源与关系顺序;
+  else (否)
+    if (拆分且来源映射完整、归属明确？) then (是)
+      :恢复拆分后实体及各自来源关系;
+    else (否)
+      :保持待核验，等待补证;
+      stop
+    endif
+  endif
+endif
+:记录操作者、前后值、原因及合并拆分历史;
+:反馈生效结果;
+stop
+footer 依据：成员 D CodeArts XMI 的成果治理流程；SRS V0.4 FR09、UC-10，需成员复核
+@enduml

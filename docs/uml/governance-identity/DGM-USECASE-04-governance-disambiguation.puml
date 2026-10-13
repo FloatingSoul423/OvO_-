@@ -1,0 +1,39 @@
+@startuml
+title DGM-USECASE-04 成果治理与身份消歧局部用例图\nFR09、FR15 / UC-08、UC-10
+left to right direction
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName "Microsoft YaHei"
+skinparam defaultFontSize 15
+skinparam usecase {
+  BackgroundColor #EAF3FF
+  BorderColor #537494
+}
+
+actor "门户管理者" as Owner
+actor "治理管理员" as Admin
+
+rectangle "OvO 学术成果分享平台：成果与身份治理" {
+  usecase "UC-10\n治理成果与学者关系" as Govern
+  usecase "治理成果与版本\nFR09-S01～S08" as Dedup
+  usecase "核验身份与成果归属\nFR15-S01～S06、S08" as Identity
+  usecase "UC-08\n确认、补录与纠正成果\nFR15-S07 接口" as Opinion
+  usecase "核对证据与当前版本" as Evidence
+  usecase "保留决定与审计证据" as Audit
+}
+
+Owner --> Opinion
+Admin --> Govern
+Admin --> Dedup
+Admin --> Identity
+Dedup ..> Evidence : <<include>>
+Identity ..> Evidence : <<include>>
+Dedup ..> Audit : <<include>>
+Identity ..> Audit : <<include>>
+
+note bottom of Govern
+  本图只展开治理逻辑；门户认领审核
+  另见 DGM-ACTIVITY-01。
+end note
+footer 依据：成员 D CodeArts XMI 中的局部用例；SRS V0.4 FR09、FR15，需成员复核
+@enduml

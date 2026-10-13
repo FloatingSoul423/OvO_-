@@ -30,7 +30,7 @@ note right of 已通过
 end note
 
 legend bottom
-  依据：FR05、UC-05、UC-06、SRS V0.3 状态登记表 2.2。
+  依据：FR05、UC-05、UC-06、SRS V0.4 状态登记表 2.2。
   已驳回后重新申请须另建记录；有未解决冲突时不得通过。
 endlegend
 @enduml
