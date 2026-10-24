@@ -1,0 +1,52 @@
+@startuml
+title DGA-SEQUENCE-02 门户认领审核时序图
+skinparam defaultFontName Microsoft YaHei
+skinparam defaultFontSize 13
+skinparam shadowing false
+actor 登录用户 as User
+boundary 认领页面 as UI
+control 认证与授权服务 as Auth
+control 认领服务 as Claim
+entity 学者门户 as Portal
+entity 证据存储 as Evidence
+actor 审核管理员 as Admin
+control 审计与通知服务 as Audit
+
+User -> UI: 选择目标学者并提交本人声明和证据
+UI -> Auth: 校验会话和账号状态
+alt 未登录或账号不可用
+  Auth --> UI: 拒绝并返回原因
+  UI --> User: 不创建申请
+else 认证通过
+  UI -> Claim: 提交认领申请
+  Claim -> Portal: 校验目标、既有授权和进行中申请
+  alt 字段无效或存在进行中申请
+    Claim --> UI: 返回字段错误或已有申请状态
+  else 可受理
+    Claim -> Evidence: 保存受控证据引用
+    Claim -> Claim: 创建待审核申请
+    Claim -> Audit: 记录提交并通知审核员
+    Admin -> Claim: 查看申请及证据摘要
+    Claim -> Auth: 校验审核权限
+    alt 证据不足
+      Admin -> Claim: 要求补充并填写理由
+      Claim -> Audit: 置为待补充并通知申请人
+      User -> UI: 补充材料
+      UI -> Claim: 提交补充内容
+      Claim -> Claim: 校验后回到待审核
+    else 拟通过
+      Claim -> Portal: 再校验版本和授权冲突
+      alt 存在未解决冲突
+        Claim -> Audit: 保持待审核并登记冲突
+      else 无冲突
+        Claim -> Portal: 原子授予对象级门户权限
+        Claim -> Audit: 置为已通过并记录审计
+      end
+    else 驳回
+      Admin -> Claim: 填写驳回理由
+      Claim -> Audit: 置为已驳回且不授予权限
+    end
+  end
+end
+Audit --> User: 返回状态和可见理由
+@enduml

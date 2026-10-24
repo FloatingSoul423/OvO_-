@@ -1,0 +1,95 @@
+@startuml
+title DGA-SEQUENCE-01 数据采集入库时序图
+skinparam defaultFontName "Microsoft YaHei"
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+autonumber
+
+actor 管理员 as Admin
+participant "采集管理界面" as UI
+participant "采集任务服务" as Task
+participant "来源适配器" as Adapter
+participant "外部数据来源" as Source
+participant "清洗与去重服务" as Clean
+participant "成果存储" as Store
+participant "人工核验队列" as Review
+participant "更新与索引服务" as Sync
+
+Admin -> UI : 创建任务（来源、成果类型、范围）
+UI -> Task : 提交任务配置
+Task -> Task : 校验管理员权限、来源启用状态与使用范围
+
+alt 来源未登记、已停用或超出许可范围
+  Task --> UI : 拒绝创建并返回具体原因
+  UI --> Admin : 展示失败原因，不创建任务
+else 校验通过
+  Task -> Store : 保存待执行任务与配置快照
+  Store --> Task : 返回任务标识
+  Task --> UI : 返回待执行任务
+  Admin -> UI : 启动任务
+  UI -> Task : 请求启动（任务标识、版本）
+  Task -> Task : 校验合法状态并转为运行中
+
+  loop 按批次读取，直至范围完成或任务中断
+    Task -> Adapter : 请求下一批（游标/检查点）
+    Adapter -> Source : 按许可条件读取来源记录
+
+    alt 来源访问失败或响应不可用
+      Source --> Adapter : 超时、限流或错误
+      Adapter --> Task : 返回失败原因与失败范围
+      Task -> Store : 保存失败原因、检查点和已处理摘要
+      Task --> UI : 状态置为失败，历史成果保持不变
+    else 获得来源记录
+      Source --> Adapter : 返回记录及来源版本
+      Adapter --> Task : 标准来源记录＋原始值＋来源证据
+      Task -> Clean : 提交记录（类型、来源ID、数据性质）
+      Clean -> Clean : 校验必填项并规范化可比较值
+      Clean -> Store : 查询同类型稳定标识与已有来源映射
+      Store --> Clean : 返回实体、来源版本与人工保护字段
+
+      alt 稳定标识匹配且无冲突
+        Clean -> Store : 幂等关联来源并合并可接受字段
+        Store --> Clean : 返回唯一成果实体标识
+      else 缺少稳定标识或证据冲突
+        Clean -> Review : 创建去重/字段冲突候选并附证据
+        Review --> Clean : 返回待核验编号
+      else 新记录且满足入库规则
+        Clean -> Store : 新建成果实体与来源记录
+        Store --> Clean : 返回唯一成果实体标识
+      end
+
+      Clean --> Task : 返回成功、候选或异常结果
+      Task -> Store : 更新处理计数、检查点和任务历史
+    end
+  end
+
+  alt 计划范围处理完成
+    Task -> Store : 保存成功状态和处理摘要
+    Task -> Sync : 发布已生效实体变更
+    Sync -> Sync : 更新详情、门户、检索和统计视图
+    Sync --> Task : 返回同步状态
+    Task --> UI : 展示成功摘要及未同步项
+  else 管理员停止任务
+    Admin -> UI : 请求停止
+    UI -> Task : 停止运行中任务
+    Task -> Store : 保存已停止状态、原因和检查点
+    Task --> UI : 展示已处理范围，保留成功历史
+  else 失败后重试
+    Admin -> UI : 请求重试失败任务
+    UI -> Task : 从安全检查点创建重试执行
+    Task -> Store : 校验检查点和既有来源映射
+    note right of Task
+      重试不重复创建成果实体；
+      已成功历史和失败原因均保留。
+    end note
+  end
+end
+
+note over Task,Store
+任务状态：待执行、运行中、成功、失败、重试、已停止。
+每条来源记录保留来源、来源ID、采集/导入时间、更新时间和使用范围；
+真实、模拟、混合数据显式标识，去重总量按成果实体计数。
+end note
+@enduml

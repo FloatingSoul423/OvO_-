@@ -46,3 +46,9 @@
 
 认领申请状态与学者门户“未认领/已认领”状态属于不同业务对象，不得混成一个状态机。
 
+## 需求分析作业 3 新增图
+
+|图号|图|负责人|当前状态|
+|---|---|---|---|
+|DGA-SEQUENCE-01|[数据采集入库时序图](sequence-collection-ingestion/README.md)|宋显涵|PlantUML 图源、SVG/PNG、追踪说明及 CodeArts 精修检查表已完成；CodeArts 平台源文件与正式导出图待完成|
+

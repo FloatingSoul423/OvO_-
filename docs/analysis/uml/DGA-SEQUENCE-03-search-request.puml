@@ -1,0 +1,41 @@
+@startuml
+title DGA-SEQUENCE-03 检索请求处理时序图
+skinparam defaultFontName Microsoft YaHei
+skinparam defaultFontSize 13
+skinparam shadowing false
+actor 访客 as Visitor
+boundary 检索页面 as UI
+control 查询服务 as Query
+control 可见性规则 as Visibility
+database 检索索引 as Index
+entity 成果与学者存储 as Store
+control 来源服务 as Source
+
+Visitor -> UI: 输入关键词、类型、年份、领域和排序
+UI -> Query: 提交查询条件与分页游标
+Query -> Query: 规范化输入并校验范围
+alt 条件无效
+  Query --> UI: 返回字段级错误且不执行查询
+else 条件有效
+  Query -> Visibility: 计算公开范围和权限过滤条件
+  Visibility --> Query: 返回可见性约束
+  Query -> Index: 组合筛选、稳定排序和分页
+  alt 索引暂时不可用
+    Index --> Query: 返回可恢复故障
+    Query --> UI: 返回错误状态和重试入口
+  else 查询成功
+    Index --> Query: 返回稳定实体ID和总量摘要
+    Query -> Store: 批量读取当前生效版本
+    Store --> Query: 返回学者/成果摘要
+    Query -> Source: 读取合法来源摘要
+    Source --> Query: 返回来源名称、原站地址和许可范围
+    Query -> Query: 剔除未公开或已失效对象
+    alt 无可见结果
+      Query --> UI: 返回空结果与有效筛选条件
+    else 有结果
+      Query --> UI: 返回结果、稳定游标和来源摘要
+    end
+  end
+end
+UI --> Visitor: 展示结果、空状态或错误状态
+@enduml

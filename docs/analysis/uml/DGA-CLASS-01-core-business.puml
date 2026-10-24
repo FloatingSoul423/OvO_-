@@ -1,0 +1,135 @@
+@startuml
+title DGA-CLASS-01 学术成果分享平台核心业务类图
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultFontName Microsoft YaHei
+skinparam defaultFontSize 14
+skinparam class {
+  BackgroundColor #F7FAFC
+  BorderColor #456A8A
+  ArrowColor #34495E
+}
+
+abstract class 学术成果 {
+  +成果标识: String
+  +标题: String
+  +发生年份: Integer
+  +公开状态: Enum
+  +发布()
+  +登记新版本()
+}
+class 论文 {
+  +DOI: String
+  +发表载体: String
+  +发表日期: Date
+  +校验DOI()
+}
+class 专利 {
+  +申请号: String
+  +公开日期: Date
+  +校验申请号()
+}
+class 科研项目 {
+  +项目编号: String
+  +起止日期: DateRange
+  +登记承担单位()
+}
+class 获奖 {
+  +奖项名称: String
+  +获奖年度: Integer
+  +登记获奖主体()
+}
+
+class 学者 {
+  +学者标识: String
+  +姓名: String
+  +别名: List
+  +公开状态: Enum
+  +维护公开资料()
+}
+class 机构 {
+  +机构标识: String
+  +名称: String
+  +维护名称沿革()
+}
+class 学术领域 {
+  +领域标识: String
+  +名称: String
+  +维护分类关系()
+}
+class 成果参与关系 {
+  +角色: Enum
+  +顺序: Integer
+  +关系状态: Enum
+  +证据等级: Enum
+  +确认()
+  +排除()
+}
+class 来源记录 {
+  +来源标识: String
+  +来源记录ID: String
+  +采集时间: DateTime
+  +许可范围: String
+  +保留原始值()
+}
+class 账号 {
+  +账号标识: String
+  +账号状态: Enum
+  +登录()
+  +停用()
+}
+class 门户授权 {
+  +授权状态: Enum
+  +生效时间: DateTime
+  +授予()
+  +撤销()
+}
+class 认领申请 {
+  +申请标识: String
+  +状态: Enum
+  +提交时间: DateTime
+  +提交()
+  +补充材料()
+  +审核()
+}
+class 认领证据 {
+  +证据类型: Enum
+  +受控引用: String
+  +验证可见性()
+}
+class 采集任务 {
+  +任务标识: String
+  +状态: Enum
+  +安全检查点: String
+  +启动()
+  +停止()
+  +重试()
+}
+class 更新记录 {
+  +记录标识: String
+  +变更前值: String
+  +变更后值: String
+  +原因: String
+  +登记审计()
+}
+
+学术成果 <|-- 论文
+学术成果 <|-- 专利
+学术成果 <|-- 科研项目
+学术成果 <|-- 获奖
+学者 "1" -- "0..*" 成果参与关系
+学术成果 "1" *-- "1..*" 成果参与关系
+学术成果 "1" *-- "1..*" 来源记录
+学者 "0..*" -- "0..*" 机构 : 任职/归属
+学者 "0..*" -- "0..*" 学术领域
+学术成果 "0..*" -- "0..*" 学术领域
+账号 "1" -- "0..*" 认领申请 : 提交
+认领申请 "1" *-- "1..*" 认领证据
+认领申请 "0..1" --> "1" 学者 : 目标档案
+账号 "1" -- "0..*" 门户授权
+门户授权 "0..*" --> "1" 学者 : 受权门户
+采集任务 "1" o-- "0..*" 来源记录 : 产生
+更新记录 "0..*" --> "1" 学术成果 : 记录变更
+更新记录 "0..*" --> "0..1" 学者 : 记录变更
+@enduml
