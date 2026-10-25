@@ -7,10 +7,11 @@
 - `DGA-SEQUENCE-01-collection-ingestion.puml`：可版本管理的 PlantUML 图源。
 - `generated/DGA-SEQUENCE-01-collection-ingestion.svg`：本地图源的矢量预览。
 - `generated/DGA-SEQUENCE-01-collection-ingestion.png`：本地图源的高清预览。
+- `codearts/DGA-SEQUENCE-01-collection-ingestion.xmi`：2026-10-25 收到并归档的 CodeArts 正式模型源文件。
 - `codearts/OvO_数据采集入库时序图_CodeArts导入包.zip`：按课程示例工程结构生成的 CodeArts Modeling 导入候选包。
 - `CodeArts精修与导出检查表.md`：在华为 CodeArts Modeling 中重绘、复核和导出的逐项清单。
 
-SVG/PNG 是 PlantUML 本地渲染结果，**不是 CodeArts 导出件**。候选包已通过 ZIP CRC、SHA-512 摘要、JSON 和 XML 本地校验，但尚未在华为云账号中实际导入；课程提交前须完成导入、按检查表补齐组合片段与生命线、人工核对，并从 CodeArts 重新导出清晰图片。
+SVG/PNG 是 PlantUML 本地渲染结果，**不是 CodeArts 导出件**。正式 XMI 已通过 XML 解析并确认模型名为“OvO-数据采集入库”；候选包仅保留为早期构建记录，不再作为正式源文件。课程提交前仍须由负责人用该 XMI 在 CodeArts 打开核对，并从同一版本模型重新导出清晰图片。
 
 ## 模型范围
 
@@ -38,4 +39,4 @@ SVG/PNG 是 PlantUML 本地渲染结果，**不是 CodeArts 导出件**。候选
 
 ## 人工复核结论
 
-本稿已与仓库中的 UC-09、采集任务状态登记表、采集治理 SRS 及核心规则 SPEC 做静态对照，并生成 CodeArts 导入候选包。尚未完成的事项是平台实际导入、按完整 PlantUML 语义精修、重新导出和组员最终签认；完成前不得把平台源文件状态写为已验收。
+本稿已与仓库中的 UC-09、采集任务状态登记表、采集治理 SRS 及核心规则 SPEC 做静态对照，并归档 CodeArts 正式 XMI。尚未完成的事项是从该模型导出配套清晰图片、交叉复核和组员最终签认；完成前不得把该图写为已验收。
