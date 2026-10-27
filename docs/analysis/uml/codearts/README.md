@@ -1,13 +1,14 @@
 # CodeArts 正式模型归档
 
-更新：2026-10-25。本目录只保存组员从华为云 CodeArts Modeling 导出的正式源文件及与其配套的导出图；`../generated/` 中同名文件仍是 PlantUML 本地预览，两者不得混称。
+更新：2026-10-27。本目录只保存组员从华为云 CodeArts Modeling 导出的正式源文件及与其配套的导出图；`../generated/` 中同名文件仍是 PlantUML 本地预览，两者不得混称。
 
 |模型|CodeArts 源文件|正式导出图|状态|
 |---|---|---|---|
 |DGA-CLASS-01 核心业务类图|`DGA-CLASS-01-core-business.xmi`|`generated/DGA-CLASS-01-core-business.png`|已归档；待组内图文一致性签认|
+|DGA-SEQUENCE-02 门户认领审核时序图|`DGA-SEQUENCE-02-claim-review.xmi`|`generated/DGA-SEQUENCE-02A-claim-submission-tracking.png`、`generated/DGA-SEQUENCE-02B-claim-review-supplement.png`|已归档；同一 XMI 内含 A/B 两张图，待组内图文一致性签认|
 |DGA-SEQUENCE-03 检索请求处理时序图|`DGA-SEQUENCE-03-search-request.xmi`|`generated/DGA-SEQUENCE-03-search-request.png`|已归档；待组内图文一致性签认|
 
-数据采集入库时序图的正式 XMI 位于 `../../../uml/sequence-collection-ingestion/codearts/DGA-SEQUENCE-01-collection-ingestion.xmi`。门户认领审核时序图当前仅有 `../DGA-SEQUENCE-02-claim-review.puml` 及本地渲染图，尚未收到 CodeArts XMI 和正式导出图。
+数据采集入库时序图的正式 XMI 位于 `../../../uml/sequence-collection-ingestion/codearts/DGA-SEQUENCE-01-collection-ingestion.xmi`，仍待补同版本正式 PNG。门户认领审核时序图的正式 XMI 与 A/B 两张导出图已于 2026-10-27 归档。
 
 ## 核验规则
 
