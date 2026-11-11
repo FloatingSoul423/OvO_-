@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2080" height="1470" viewBox="0 0 2080 1470">
+<defs><marker id="dependency" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="10" markerHeight="10" orient="auto"><path d="M 1 1 L 11 6 L 1 11" fill="none" stroke="#667085" stroke-width="1.2"/></marker>
+<marker id="flow" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto"><path d="M 1 1 L 11 6 L 1 11 Z" fill="#175cd3"/></marker></defs>
+<rect width="2080" height="1470" fill="white"/>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="32" fill="#182230" text-anchor="middle" font-weight="bold"><tspan x="1040.0" y="54">LA-01  学术成果分享平台逻辑架构</tspan></text>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="24" fill="#182230" text-anchor="middle"><tspan x="1040.0" y="96">五层职责 · 七类逻辑服务 · ECS API 模块化单体 + 独立 Worker</tspan></text>
+<path d="M 70 154 V 120 H 210 V 134 H 1940 V 250 H 70 Z" fill="#f5f7fa" stroke="#98a2b3"/>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="26" fill="#182230" text-anchor="start" font-weight="bold"><tspan x="92" y="155">展现层</tspan></text>
+<path d="M 70 344 V 310 H 210 V 324 H 1940 V 465 H 70 Z" fill="#f5f7fa" stroke="#98a2b3"/>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="26" fill="#182230" text-anchor="start" font-weight="bold"><tspan x="92" y="345">服务层</tspan></text>
+<path d="M 70 614 V 580 H 210 V 594 H 1940 V 740 H 70 Z" fill="#f5f7fa" stroke="#98a2b3"/>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="26" fill="#182230" text-anchor="start" font-weight="bold"><tspan x="92" y="615">存储层</tspan></text>
+<path d="M 70 884 V 850 H 210 V 864 H 1940 V 990 H 70 Z" fill="#f5f7fa" stroke="#98a2b3"/>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="26" fill="#182230" text-anchor="start" font-weight="bold"><tspan x="92" y="885">处理层</tspan></text>
+<path d="M 70 1094 V 1060 H 210 V 1074 H 1940 V 1190 H 70 Z" fill="#f5f7fa" stroke="#98a2b3"/>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="26" fill="#182230" text-anchor="start" font-weight="bold"><tspan x="92" y="1095">采集层</tspan></text>
+<rect x="300" y="164" width="650" height="65" fill="white" stroke="#667085" stroke-width="1.5"/>
+<g fill="white" stroke="#667085"><rect x="921" y="173" width="18" height="22"/><rect x="916" y="176" width="9" height="6"/><rect x="916" y="187" width="9" height="6"/></g>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="24" fill="#182230" text-anchor="middle" font-weight="bold"><tspan x="620.0" y="195.0">门户</tspan></text>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#182230" text-anchor="middle"><tspan x="620.0" y="218.0">检索、成果展示与本人认领入口</tspan></text>
+<rect x="1050" y="164" width="650" height="65" fill="white" stroke="#667085" stroke-width="1.5"/>
+<g fill="white" stroke="#667085"><rect x="1671" y="173" width="18" height="22"/><rect x="1666" y="176" width="9" height="6"/><rect x="1666" y="187" width="9" height="6"/></g>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="24" fill="#182230" text-anchor="middle" font-weight="bold"><tspan x="1370.0" y="195.0">管理端</tspan></text>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#182230" text-anchor="middle"><tspan x="1370.0" y="218.0">审核、采集控制与审计入口</tspan></text>
+<rect x="250" y="354" width="270" height="80" fill="white" stroke="#667085" stroke-width="1.5"/>
+<g fill="white" stroke="#667085"><rect x="491" y="363" width="18" height="22"/><rect x="486" y="366" width="9" height="6"/><rect x="486" y="377" width="9" height="6"/></g>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="24" fill="#182230" text-anchor="middle" font-weight="bold"><tspan x="380.0" y="380.0">检索服务</tspan></text>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#182230" text-anchor="middle"><tspan x="380.0" y="403.0">CSS 取候选</tspan><tspan x="380.0" y="428.0">RDS 复核可见性/版本</tspan></text>
+<rect x="550" y="354" width="270" height="80" fill="white" stroke="#667085" stroke-width="1.5"/>
+<g fill="white" stroke="#667085"><rect x="791" y="363" width="18" height="22"/><rect x="786" y="366" width="9" height="6"/><rect x="786" y="377" width="9" height="6"/></g>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="24" fill="#182230" text-anchor="middle" font-weight="bold"><tspan x="680.0" y="380.0">门户与认领服务</tspan></text>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#182230" text-anchor="middle"><tspan x="680.0" y="403.0">认领、审核与授权</tspan><tspan x="680.0" y="428.0">受控材料访问</tspan></text>
+<rect x="850" y="354" width="270" height="80" fill="white" stroke="#667085" stroke-width="1.5"/>
+<g fill="white" stroke="#667085"><rect x="1091" y="363" width="18" height="22"/><rect x="1086" y="366" width="9" height="6"/><rect x="1086" y="377" width="9" height="6"/></g>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="24" fill="#182230" text-anchor="middle" font-weight="bold"><tspan x="980.0" y="380.0">统计服务</tspan></text>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#182230" text-anchor="middle"><tspan x="980.0" y="403.0">统计与合作网络</tspan><tspan x="980.0" y="428.0">读取 RDS 事实/汇总</tspan></text>
+<rect x="1150" y="354" width="270" height="80" fill="white" stroke="#667085" stroke-width="1.5"/>
+<g fill="white" stroke="#667085"><rect x="1391" y="363" width="18" height="22"/><rect x="1386" y="366" width="9" height="6"/><rect x="1386" y="377" width="9" height="6"/></g>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="24" fill="#182230" text-anchor="middle" font-weight="bold"><tspan x="1280.0" y="380.0">认证服务</tspan></text>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#182230" text-anchor="middle"><tspan x="1280.0" y="403.0">账号认证与范围鉴权</tspan><tspan x="1280.0" y="428.0">进程内共用鉴权能力</tspan></text>
+<rect x="1450" y="354" width="270" height="80" fill="white" stroke="#667085" stroke-width="1.5"/>
+<g fill="white" stroke="#667085"><rect x="1691" y="363" width="18" height="22"/><rect x="1686" y="366" width="9" height="6"/><rect x="1686" y="377" width="9" height="6"/></g>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="24" fill="#182230" text-anchor="middle" font-weight="bold"><tspan x="1580.0" y="380.0">管理后台</tspan></text>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#182230" text-anchor="middle"><tspan x="1580.0" y="403.0">审核、任务控制、审计</tspan><tspan x="1580.0" y="428.0">管理操作复验权限</tspan></text>
+<rect x="250" y="624" width="350" height="90" fill="white" stroke="#667085" stroke-width="1.5"/>
+<g fill="white" stroke="#667085"><rect x="571" y="633" width="18" height="22"/><rect x="566" y="636" width="9" height="6"/><rect x="566" y="647" width="9" height="6"/></g>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="24" fill="#182230" text-anchor="middle" font-weight="bold"><tspan x="420.0" y="655.0">CSS · 公开检索索引</tspan></text>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#182230" text-anchor="middle"><tspan x="420.0" y="678.0">仅生效且可公开字段</tspan><tspan x="420.0" y="703.0">版本化投影，可重建</tspan></text>
+<rect x="700" y="624" width="650" height="90" fill="white" stroke="#667085" stroke-width="1.5"/>
+<g fill="white" stroke="#667085"><rect x="1321" y="633" width="18" height="22"/><rect x="1316" y="636" width="9" height="6"/><rect x="1316" y="647" width="9" height="6"/></g>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="24" fill="#182230" text-anchor="middle" font-weight="bold"><tspan x="1020.0" y="655.0">RDS for MySQL · 权威数据</tspan></text>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#182230" text-anchor="middle"><tspan x="1020.0" y="678.0">业务事实 / 认领与授权 / 持久任务</tspan><tspan x="1020.0" y="703.0">同事务发件箱 Outbox / 统计汇总</tspan></text>
+<rect x="1450" y="624" width="330" height="90" fill="white" stroke="#667085" stroke-width="1.5"/>
+<g fill="white" stroke="#667085"><rect x="1751" y="633" width="18" height="22"/><rect x="1746" y="636" width="9" height="6"/><rect x="1746" y="647" width="9" height="6"/></g>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="24" fill="#182230" text-anchor="middle" font-weight="bold"><tspan x="1610.0" y="655.0">OBS · 对象存储</tspan></text>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#182230" text-anchor="middle"><tspan x="1610.0" y="678.0">原始快照与受控材料</tspan><tspan x="1610.0" y="703.0">材料访问由服务鉴权</tspan></text>
+<rect x="250" y="895" width="1530" height="70" fill="white" stroke="#667085" stroke-width="1.5"/>
+<g fill="white" stroke="#667085"><rect x="1751" y="904" width="18" height="22"/><rect x="1746" y="907" width="9" height="6"/><rect x="1746" y="918" width="9" height="6"/></g>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="24" fill="#182230" text-anchor="middle" font-weight="bold"><tspan x="1010.0" y="928.5">数据处理（ETL）服务 · 独立 Worker</tspan></text>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#182230" text-anchor="middle"><tspan x="1010.0" y="951.5">清洗 → 去重 → 身份消歧 → 规范化入库；投影执行幂等与版本比较</tspan></text>
+<rect x="250" y="1104" width="1530" height="65" fill="white" stroke="#667085" stroke-width="1.5"/>
+<g fill="white" stroke="#667085"><rect x="1751" y="1113" width="18" height="22"/><rect x="1746" y="1116" width="9" height="6"/><rect x="1746" y="1127" width="9" height="6"/></g>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="24" fill="#182230" text-anchor="middle" font-weight="bold"><tspan x="1010.0" y="1135.0">数据采集服务 · 独立 Worker</tspan></text>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#182230" text-anchor="middle"><tspan x="1010.0" y="1158.0">来源适配与原始快照；按 RDS 持久任务领取、重试并记录结果</tspan></text>
+<rect x="450" y="1250" width="1100" height="55" fill="white" stroke="#667085" stroke-width="1.5"/>
+<g fill="white" stroke="#667085"><rect x="1521" y="1259" width="18" height="22"/><rect x="1516" y="1262" width="9" height="6"/><rect x="1516" y="1273" width="9" height="6"/></g>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="24" fill="#182230" text-anchor="middle" font-weight="bold"><tspan x="995.0" y="1276.0">公开学术元数据来源</tspan></text>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#182230" text-anchor="middle"><tspan x="995.0" y="1299.0">授权范围内的公共来源；来源配额、条款及可用性分别核验</tspan></text>
+<polyline points="180,250 180,310" fill="none" stroke="#667085" stroke-width="1.8" marker-end="url(#dependency)" stroke-dasharray="8 6"/>
+<polyline points="385,434 385,540 425,540 425,624" fill="none" stroke="#667085" stroke-width="1.8" marker-end="url(#dependency)" stroke-dasharray="8 6"/>
+<polyline points="685,434 685,515 800,515 800,624" fill="none" stroke="#667085" stroke-width="1.8" marker-end="url(#dependency)" stroke-dasharray="8 6"/>
+<polyline points="985,434 985,624" fill="none" stroke="#667085" stroke-width="1.8" marker-end="url(#dependency)" stroke-dasharray="8 6"/>
+<polyline points="1285,434 1285,515 1220,515 1220,624" fill="none" stroke="#667085" stroke-width="1.8" marker-end="url(#dependency)" stroke-dasharray="8 6"/>
+<polyline points="1585,434 1585,555 1320,555 1320,624" fill="none" stroke="#667085" stroke-width="1.8" marker-end="url(#dependency)" stroke-dasharray="8 6"/>
+<polyline points="250,1135 210,1135 210,835 620,835 620,680 700,680" fill="none" stroke="#667085" stroke-width="1.8" marker-end="url(#dependency)" stroke-dasharray="8 6"/>
+<polyline points="1940,390 1920,390 1920,650 1780,650" fill="none" stroke="#667085" stroke-width="1.8" marker-end="url(#dependency)" stroke-dasharray="8 6"/>
+<polyline points="520,385 535,385 535,565 615,565 615,650 700,650" fill="none" stroke="#667085" stroke-width="1.8" marker-end="url(#dependency)" stroke-dasharray="8 6"/>
+<polyline points="1000,1250 1000,1169" fill="none" stroke="#175cd3" stroke-width="2.4" marker-end="url(#flow)"/>
+<polyline points="1000,1104 1000,965" fill="none" stroke="#175cd3" stroke-width="2.4" marker-end="url(#flow)"/>
+<polyline points="900,895 900,714" fill="none" stroke="#175cd3" stroke-width="2.4" marker-end="url(#flow)"/>
+<polyline points="1200,714 1200,895" fill="none" stroke="#175cd3" stroke-width="2.4" marker-end="url(#flow)"/>
+<polyline points="500,895 500,714" fill="none" stroke="#175cd3" stroke-width="2.4" marker-end="url(#flow)"/>
+<polyline points="1600,714 1600,895" fill="none" stroke="#175cd3" stroke-width="2.4" marker-end="url(#flow)"/>
+<polyline points="1780,1135 1860,1135 1860,665 1780,665" fill="none" stroke="#175cd3" stroke-width="2.4" marker-end="url(#flow)"/>
+<rect x="196" y="268" width="151.0" height="31" fill="white"/>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#475467" text-anchor="start"><tspan x="200" y="291">D1  HTTPS API</tspan></text>
+<rect x="401" y="502" width="121.0" height="31" fill="white"/>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#475467" text-anchor="start"><tspan x="405" y="525">D2 候选检索</tspan></text>
+<rect x="696" y="474" width="132.0" height="31" fill="white"/>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#475467" text-anchor="start"><tspan x="700" y="497">D3 认领/授权</tspan></text>
+<rect x="998" y="542" width="121.0" height="31" fill="white"/>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#475467" text-anchor="start"><tspan x="1002" y="565">D4 统计读取</tspan></text>
+<rect x="1066" y="474" width="132.0" height="31" fill="white"/>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#475467" text-anchor="start"><tspan x="1070" y="497">D5 账号/权限</tspan></text>
+<rect x="1366" y="514" width="183.0" height="31" fill="white"/>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#475467" text-anchor="start"><tspan x="1370" y="537">D6 审核/任务/审计</tspan></text>
+<rect x="221" y="1001" width="121.0" height="56" fill="white"/>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#475467" text-anchor="start"><tspan x="225" y="1024">D7 持久任务</tspan><tspan x="225" y="1049">领取/重试</tspan></text>
+<rect x="1936" y="522" width="88" height="56" fill="white"/>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#475467" text-anchor="start"><tspan x="1940" y="545">D8 受控</tspan><tspan x="1940" y="570">材料访问</tspan></text>
+<rect x="546" y="532" width="192.0" height="31" fill="white"/>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#475467" text-anchor="start"><tspan x="550" y="555">D9 可见性/版本复核</tspan></text>
+<rect x="1016" y="1203" width="141.0" height="31" fill="white"/>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#175cd3" text-anchor="start"><tspan x="1020" y="1226">F1 来源元数据</tspan></text>
+<rect x="1016" y="1005" width="181.0" height="31" fill="white"/>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#175cd3" text-anchor="start"><tspan x="1020" y="1028">F2 待处理数据引用</tspan></text>
+<rect x="646" y="774" width="209.0" height="56" fill="white"/>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#175cd3" text-anchor="start"><tspan x="650" y="797">F3 事实/任务/Outbox</tspan><tspan x="650" y="822">同一 RDS 事务</tspan></text>
+<rect x="1216" y="774" width="172.0" height="31" fill="white"/>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#175cd3" text-anchor="start"><tspan x="1220" y="797">F4 任务/事件拉取</tspan></text>
+<rect x="246" y="774" width="161.0" height="56" fill="white"/>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#175cd3" text-anchor="start"><tspan x="250" y="797">F5 公开索引投影</tspan><tspan x="250" y="822">幂等 + 版本比较</tspan></text>
+<rect x="1614" y="774" width="161.0" height="31" fill="white"/>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#175cd3" text-anchor="start"><tspan x="1618" y="797">F6 原始快照引用</tspan></text>
+<rect x="1873" y="1002" width="88" height="56" fill="white"/>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="20" fill="#175cd3" text-anchor="start"><tspan x="1877" y="1025">F7 原始</tspan><tspan x="1877" y="1050">快照写入</tspan></text>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="23" fill="#182230" text-anchor="start"><tspan x="100" y="1363">灰色虚线 D：UML 依赖（使用方 → 提供方）     蓝色实线 F：数据流（生产方 → 接收方）</tspan></text>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="22" fill="#182230" text-anchor="start"><tspan x="100" y="1402">初期部署：服务层五个 API 模块共置 ECS；采集与 ETL 独立 Worker。</tspan></text>
+<text font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="22" fill="#182230" text-anchor="start"><tspan x="100" y="1437">RDS 持久任务 + 同事务发件箱；CSS 仅公开投影；统计读取 RDS；展现层仅经服务 API 访问数据。</tspan></text>
+</svg>

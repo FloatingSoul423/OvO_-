@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xmi:XMI xmlns:uml="http://www.omg.org/spec/UML/20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmi:version="2.5.1">
+  <xmi:Documentation exporter="OvO logical architecture generator" exporterVersion="1.0" />
+  <uml:Model xmi:id="255e85d7c10e513fb8232aef834d58f0" name="学术成果分享平台逻辑架构">
+    <packagedElement xmi:type="uml:Package" xmi:id="cae1654f4214536aa07e89bf672c2538" name="展现层">
+      <ownedComment xmi:id="8f876bfe047057bea52be772a6eef2f6">
+        <body>门户及管理端交互；仅通过服务 API 访问业务能力。</body>
+      </ownedComment>
+      <packagedElement xmi:type="uml:Component" xmi:id="7b548dca1e1e57c197a229baad0e6000" name="门户">
+        <ownedComment xmi:id="4354d5e3d396597898e979aa3ae26e6e">
+          <body>检索、成果展示与本人认领入口</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Component" xmi:id="3ef962c4f4465a52bf965f8e7af89585" name="管理端">
+        <ownedComment xmi:id="3f0e5e95850a5c869c4524daf83e1abd">
+          <body>审核、采集控制与审计入口</body>
+        </ownedComment>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="2d51c66d575355e6b4dbf9387320950f" name="服务层">
+      <ownedComment xmi:id="daeac299c0565f11a23dcc4b6cdbc2c1">
+        <body>检索、门户与认领、统计、认证及管理后台五个逻辑模块；初期共同部署于 ECS API 模块化单体。</body>
+      </ownedComment>
+      <packagedElement xmi:type="uml:Component" xmi:id="12da2f5e7b5958509ab3daa86b418c80" name="检索服务">
+        <ownedComment xmi:id="431767a6dd395334b610e53e0bcd7ac0">
+          <body>CSS 取候选; RDS 复核可见性/版本</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Component" xmi:id="72914bdd3bf65a6389af9639c76e1b56" name="门户与认领服务">
+        <ownedComment xmi:id="5a054d2434df59d489af448247ec9084">
+          <body>认领、审核与授权; 受控材料访问</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Component" xmi:id="ba422ef2f0ee5727ab869cdf26488417" name="统计服务">
+        <ownedComment xmi:id="0133b20c3a335a779967bce8ae2ebc1d">
+          <body>统计与合作网络; 读取 RDS 事实/汇总</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Component" xmi:id="a295985a012c594eb9a2415f28eb05ea" name="认证服务">
+        <ownedComment xmi:id="360079e74381530eaf943d98be52a36d">
+          <body>账号认证与范围鉴权; 进程内共用鉴权能力</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Component" xmi:id="3c2b2790ec175ba4b3134c6ed6360868" name="管理后台">
+        <ownedComment xmi:id="a6c0252746e454208eba7e7bc70964ba">
+          <body>审核、任务控制、审计; 管理操作复验权限</body>
+        </ownedComment>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="016121967f3056c4ae6d1d085ae0390e" name="存储层">
+      <ownedComment xmi:id="e96abf8476a95177b9317d406794a436">
+        <body>RDS 保存权威事实、任务、发件箱和汇总；OBS 保存原始数据及受控材料；CSS 仅保存公开索引投影。</body>
+      </ownedComment>
+      <packagedElement xmi:type="uml:Component" xmi:id="f5ebf58ea2a15418adbf5e38bdadbeb1" name="CSS · 公开检索索引">
+        <ownedComment xmi:id="2f5ebff3fef55abc9dfde9c2199f2828">
+          <body>仅生效且可公开字段; 版本化投影，可重建</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Component" xmi:id="19aa73ddfc4d5421a65c3ddad20e36db" name="RDS for MySQL · 权威数据">
+        <ownedComment xmi:id="d5400ee6dbc352fa84a3f97683853e11">
+          <body>业务事实 / 认领与授权 / 持久任务; 同事务发件箱 Outbox / 统计汇总</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Component" xmi:id="85fb3c3281ca54e5b26e052e6b52ea2c" name="OBS · 对象存储">
+        <ownedComment xmi:id="66d8cda8440c5f88ae0896710d032520">
+          <body>原始快照与受控材料; 材料访问由服务鉴权</body>
+        </ownedComment>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="955be3adaeb4582aa6838597441aabfb" name="处理层">
+      <ownedComment xmi:id="9443b2334196538ca547aa3f2dde56bb">
+        <body>数据处理 ETL 独立 Worker；清洗、去重、消歧、事实入库和幂等版本投影。</body>
+      </ownedComment>
+      <packagedElement xmi:type="uml:Component" xmi:id="5ea1067bf29f54bf972f670cfe435c9f" name="数据处理（ETL）服务 · 独立 Worker">
+        <ownedComment xmi:id="a7414c32b3bb5fbd9df7e26306fda4d2">
+          <body>清洗 → 去重 → 身份消歧 → 规范化入库；投影执行幂等与版本比较</body>
+        </ownedComment>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="58f4a78e07d6588c928ea59c9edf527f" name="采集层">
+      <ownedComment xmi:id="dbe0373c167455038db648721a3dd672">
+        <body>数据采集独立 Worker；来源适配、原始快照和 RDS 持久任务领取/重试。</body>
+      </ownedComment>
+      <packagedElement xmi:type="uml:Component" xmi:id="bdda4fcf803b5682bb88f8ccaa87fd8c" name="数据采集服务 · 独立 Worker">
+        <ownedComment xmi:id="3d33cee754db5c46988a28003ef268a8">
+          <body>来源适配与原始快照；按 RDS 持久任务领取、重试并记录结果</body>
+        </ownedComment>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Component" xmi:id="3ec286807be35ab8929196cdc347a2f8" name="公开学术元数据来源">
+      <ownedComment xmi:id="c25c8dd30ae151449ddc3054b22a9083">
+        <body>授权范围内的公共来源；来源配额、条款及可用性分别核验</body>
+      </ownedComment>
+    </packagedElement>
+    <packagedElement xmi:id="697f0baa01e05ecc82b6b5d2bcb7fbaa" name="D1 HTTPS API 依赖" xmi:type="uml:Dependency" client="cae1654f4214536aa07e89bf672c2538" supplier="2d51c66d575355e6b4dbf9387320950f" />
+    <packagedElement xmi:id="04daee7871a8583a85616ae93182611b" name="D2 从 CSS 取得公开检索候选" xmi:type="uml:Dependency" client="12da2f5e7b5958509ab3daa86b418c80" supplier="f5ebf58ea2a15418adbf5e38bdadbeb1" />
+    <packagedElement xmi:id="72db1cc661565338b5b996808d0056bb" name="D3 认领与授权事务" xmi:type="uml:Dependency" client="72914bdd3bf65a6389af9639c76e1b56" supplier="19aa73ddfc4d5421a65c3ddad20e36db" />
+    <packagedElement xmi:id="5047787011e5593bb8a3dd0fa1f3f0ac" name="D4 从 RDS 读取统计事实与汇总" xmi:type="uml:Dependency" client="ba422ef2f0ee5727ab869cdf26488417" supplier="19aa73ddfc4d5421a65c3ddad20e36db" />
+    <packagedElement xmi:id="086197288aa051ac9672af648cd89d2b" name="D5 账号与权限范围读取" xmi:type="uml:Dependency" client="a295985a012c594eb9a2415f28eb05ea" supplier="19aa73ddfc4d5421a65c3ddad20e36db" />
+    <packagedElement xmi:id="d34ad4f76a635d2a8c1b726d1e2ee2a2" name="D6 审核、任务控制与审计" xmi:type="uml:Dependency" client="3c2b2790ec175ba4b3134c6ed6360868" supplier="19aa73ddfc4d5421a65c3ddad20e36db" />
+    <packagedElement xmi:id="8321a25f853a5487a66f0d174604bf13" name="D7 RDS 持久任务领取与重试" xmi:type="uml:Dependency" client="bdda4fcf803b5682bb88f8ccaa87fd8c" supplier="19aa73ddfc4d5421a65c3ddad20e36db" />
+    <packagedElement xmi:id="b0837cae822357d4a84121a92acb26f7" name="D8 服务鉴权后的受控材料访问" xmi:type="uml:Dependency" client="2d51c66d575355e6b4dbf9387320950f" supplier="85fb3c3281ca54e5b26e052e6b52ea2c" />
+    <packagedElement xmi:id="36bc4e73798258548a16022de93aa276" name="D9 基于 RDS 权威事实复核候选可见性与版本" xmi:type="uml:Dependency" client="12da2f5e7b5958509ab3daa86b418c80" supplier="19aa73ddfc4d5421a65c3ddad20e36db" />
+    <packagedElement xmi:type="uml:InformationItem" xmi:id="bc8ea8a3d56d54cabf2ffe258f6141e2" name="来源元数据" />
+    <packagedElement xmi:id="83b4fdf0d0325adb9916647a18d9e90b" name="F1 来源元数据" xmi:type="uml:InformationFlow" informationSource="3ec286807be35ab8929196cdc347a2f8" informationTarget="bdda4fcf803b5682bb88f8ccaa87fd8c" conveyed="bc8ea8a3d56d54cabf2ffe258f6141e2" />
+    <packagedElement xmi:type="uml:InformationItem" xmi:id="c85e67d8553c5bbdbcbf17a242863f0f" name="待处理数据引用与持久任务" />
+    <packagedElement xmi:id="d70d470ffabe5224bf11a14e0b5b4b5b" name="F2 待处理数据引用与持久任务" xmi:type="uml:InformationFlow" informationSource="bdda4fcf803b5682bb88f8ccaa87fd8c" informationTarget="5ea1067bf29f54bf972f670cfe435c9f" conveyed="c85e67d8553c5bbdbcbf17a242863f0f" />
+    <packagedElement xmi:type="uml:InformationItem" xmi:id="19c53695b731573083cd0e379febb116" name="规范事实、任务状态和同事务发件箱事件" />
+    <packagedElement xmi:id="12cfd6f233535222a9975b9af61f388d" name="F3 规范事实、任务状态和同事务发件箱事件" xmi:type="uml:InformationFlow" informationSource="5ea1067bf29f54bf972f670cfe435c9f" informationTarget="19aa73ddfc4d5421a65c3ddad20e36db" conveyed="19c53695b731573083cd0e379febb116" />
+    <packagedElement xmi:type="uml:InformationItem" xmi:id="655c5a96ebf25d8987844828d5a60e36" name="待执行任务与待投影 Outbox 事件" />
+    <packagedElement xmi:id="76934ac3885c54598e04c65d722cac0d" name="F4 待执行任务与待投影 Outbox 事件" xmi:type="uml:InformationFlow" informationSource="19aa73ddfc4d5421a65c3ddad20e36db" informationTarget="5ea1067bf29f54bf972f670cfe435c9f" conveyed="655c5a96ebf25d8987844828d5a60e36" />
+    <packagedElement xmi:type="uml:InformationItem" xmi:id="2d6421af9bdb53148f15fddc79e8a084" name="仅公开的幂等版本索引投影" />
+    <packagedElement xmi:id="7f1880bb01d05a4d9fe08d4a3c752eee" name="F5 仅公开的幂等版本索引投影" xmi:type="uml:InformationFlow" informationSource="5ea1067bf29f54bf972f670cfe435c9f" informationTarget="f5ebf58ea2a15418adbf5e38bdadbeb1" conveyed="2d6421af9bdb53148f15fddc79e8a084" />
+    <packagedElement xmi:type="uml:InformationItem" xmi:id="600d0e9aae8c5008a3b205a8189e7cdb" name="授权的原始快照读取引用" />
+    <packagedElement xmi:id="7a2f1e40a64057248c29a507a2194c18" name="F6 授权的原始快照读取引用" xmi:type="uml:InformationFlow" informationSource="85fb3c3281ca54e5b26e052e6b52ea2c" informationTarget="5ea1067bf29f54bf972f670cfe435c9f" conveyed="600d0e9aae8c5008a3b205a8189e7cdb" />
+    <packagedElement xmi:type="uml:InformationItem" xmi:id="2d1a778fb5d056bca37e9daeddf4e626" name="采集原始快照写入 OBS" />
+    <packagedElement xmi:id="0fcc77677c2d5f7fb477ca339a393b31" name="F7 采集原始快照写入 OBS" xmi:type="uml:InformationFlow" informationSource="bdda4fcf803b5682bb88f8ccaa87fd8c" informationTarget="85fb3c3281ca54e5b26e052e6b52ea2c" conveyed="2d1a778fb5d056bca37e9daeddf4e626" />
+  </uml:Model>
+</xmi:XMI>

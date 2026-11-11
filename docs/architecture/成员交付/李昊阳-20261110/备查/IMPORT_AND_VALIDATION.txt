@@ -1,0 +1,47 @@
+LA-01 学术成果分享平台逻辑架构 — 导入与复核说明
+2026-11-10；AI 辅助生成，待团队人工复核。
+
+交付文件
+1. OvO_LA01_logical_architecture_20261110.zip：CodeArts 原生工程归档。
+   内含工程目录下的 define.json、1_meta.zip、2_data.zip；元数据及数据归档的 SHA-512 已核对。
+2. LA-01.xml：原生 mxGraph 图源；使用真实导出样本中的 Package、Component 和 Dependency 字段/样式。
+   数据流使用原生通用连线，图形标签、箭头、端点和分层子图元均可编辑。
+3. LA-01.svg、LA-01.png：同一模型与坐标生成的本地预览；PNG 为 4160 × 2940 像素。
+   建议在 Word A4 横页以约 26 cm 宽插入；纵页可保留高清文件供放大查看。
+4. LA-01.xmi：真实 UML 语义模型；包含 Model、Package、Component、Dependency、InformationItem 和 InformationFlow。
+   依赖使用 client/supplier，数据流使用 informationSource/informationTarget/conveyed，所有引用均已解析检查。
+   XMI 保存语义，布局以原生工程 XML 为准；它不是把 mxGraph XML 更名得到的文件。
+5. architecture-model.json：唯一业务与布局输入；包含图元、职责、关系及编号。
+   model-data.json 保存展开后的原生记录，validation.json 保存本地完整性与文件哈希结果。
+6. build_logical_architecture.py 与 templates/：可复建工具及脱敏序列化模板。
+   已移除模板中的业务名称、用户 ID、属性记录与原图元 ID；模板仅复用结构、内置类型和样式。
+
+架构约定
+五层为采集、处理、存储、服务、展现。七类逻辑服务为采集、ETL、检索、门户与认领、统计、认证、管理后台。
+初期服务层五个 API 模块共同部署于 ECS；采集与 ETL 采用独立 Worker。
+RDS 保存事实、认领/授权、持久任务、同事务发件箱和统计汇总；OBS 保存原始快照及受控材料；CSS 只存生效且可公开字段。
+检索从 CSS 取得候选后依赖 RDS 权威事实复核可见性与版本（D9）；统计读取 RDS（D4）。
+灰色虚线 D1–D9 为 UML 依赖：箭头指向被依赖的提供方。
+蓝色实线 F1–F7 为业务数据流：箭头指向数据接收方，不把同方向的数据流冒充 UML 依赖。
+客户端仅经服务 HTTPS API；材料访问由服务鉴权。事实、任务状态与 Outbox 在同一个 RDS 事务中提交，投影按版本幂等处理。
+
+CodeArts 复核
+选择上述原生工程 ZIP 作为工程导入文件，保留 ZIP 内目录层次与文件名。进入 LA-01 逻辑架构图后：
+逐项检查五个分层包、七类逻辑服务、D1–D9 / F1–F7 端点、中文、图标、箭头和缩放可读性；
+特别核对统计不读 CSS、CSS 不含受控材料、展现不直连存储、D9 可见性/版本复核、原始快照与同事务发件箱路径。
+按课程要求在 CodeArts 内完成实际编辑复核并重新导出截图/图片与工程，替换本地预览后再作为云端导出成果提交。
+
+当前验证边界
+已通过本地 ZIP CRC、SHA-512、UTF-8、ID 唯一性、包/父图元/连线引用、JSON/XML 镜像、子图元范围、关键业务边界和 XMI 引用检查。
+已渲染并目视检查 PNG；另检查折线不穿过无关组件或编号标签。
+尚未在华为云实际导入、编辑、重新导出；尚未通过第三方 UML 工具兼容性测试。不得将本地预览称为 CodeArts 云端导出截图或已通过课程验收。
+
+复建
+在仓库根目录执行：python docs/architecture/03-logical/build_logical_architecture.py
+需要 Python 标准库、Node.js 与 sharp。默认自动查找 Codex 捆绑 node_modules；其他环境可传 --node-modules 路径。
+本目录已带脱敏序列化模板，普通复建不依赖工作区外的原始成员包。
+
+格式与依据
+课程架构设计课堂展示与提交要求（作业4）第2、3、5、6页；本轮确认的五层与七服务约定。
+UML/XMI 语义参考 OMG UML 规范：https://www.omg.org/spec/UML/2.5.1
+原生序列化字段来自用户提供的参考图 asdfghjkl_master_20261012160707 原生导出包。

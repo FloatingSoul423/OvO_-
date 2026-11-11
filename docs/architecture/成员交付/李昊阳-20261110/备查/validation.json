@@ -1,0 +1,48 @@
+{
+  "status": "passed",
+  "cloud_import": "not_run",
+  "cloud_export": "not_run",
+  "diagram": "LA-01",
+  "layers": 5,
+  "logical_services": 7,
+  "components": 13,
+  "dependencies": 9,
+  "information_flows": 7,
+  "checks": [
+    "ZIP CRC and SHA-512",
+    "strict UTF-8",
+    "unique graph/semantic/XMI IDs",
+    "all visual parents and endpoints resolve",
+    "JSON/XML node/edge parity",
+    "native Package/Component/Dependency types",
+    "child geometry inside layers",
+    "display layer does not access stores directly",
+    "statistics depends on RDS",
+    "search revalidates candidate visibility/version in RDS",
+    "no arrow passes through unrelated cards or label boxes",
+    "true UML XMI types and all references resolve",
+    "dependency and data-flow directions separated"
+  ],
+  "limitations": [
+    "尚未在华为云 CodeArts Modeling 中实际导入、编辑及重新导出。",
+    "本地 SVG/PNG 为原生工程同模型、同坐标预览，不能称为云端导出截图。",
+    "UML XMI 是真实语义模型交换文件；布局由 CodeArts 工程 XML 保存。"
+  ],
+  "png_render": {
+    "format": "png",
+    "width": 4160,
+    "height": 2940,
+    "channels": 4,
+    "premultiplied": false,
+    "hasAlpha": true,
+    "size": 691440
+  },
+  "archive_sha512": "804a07be7f96e48a4bafe6f1d03a0bfab076aec475cdc812ff3a0cd7dd985b85b391ab1736e420f633c2534ac8c494af29fb3b5bd4a64eeb6a75485bbd9bfc81",
+  "files_sha512": {
+    "LA-01.svg": "faaa1e68796a176ff5960f2d6ffae2fcffcf3dc735edf5e927cf7563d84b21d963ab3426661dcb959ea0000d460a576aa6f3f34a0488f261395b95e9ec25fb86",
+    "LA-01.png": "3437d2913cf47d9aa588af2d845d06c48ed1166659185f22ebd97cac83e408bf21e43f95039cede1bc579fbd52ff54eec59c906e8ec0738d284788bc6ed136b4",
+    "LA-01.xml": "a988320dfd82b7f1e02157377114191649ef14af83c45a891e2b71264433f0f88961528482e459df1cbc47a963de4aeb8afb9d6348a56d511ba379eadf2bcd68",
+    "LA-01.xmi": "f2b49f48f8e1e52e6ef8f639dd1dd223d5bce7c1cfd034c7f8dccf3963687d1714d73674bb84a70eb289859dd2b7352183cf08bfe141464440c2e9a72220f197",
+    "architecture-model.json": "68c50c41bc7b28775c932e46a1801d377aeb478c98563090616fc90c4a872052e6199309cbdb3faa5ef487a32de3b209ec2b8efb6326937ebed0814c272453eb"
+  }
+}
