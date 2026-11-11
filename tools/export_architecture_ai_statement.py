@@ -68,7 +68,7 @@ while i < len(lines):
 
 footer=sec.footer.paragraphs[0]
 footer.alignment=WD_ALIGN_PARAGRAPH.RIGHT
-font_run(footer.add_run('03组 可御风雪可燃冰  ·  作业4 AI 使用声明  ·  V0.1'),8,False,(125,130,127))
+font_run(footer.add_run('03组 可御风雪可燃冰  ·  作业4 AI 使用声明  ·  V0.2'),8,False,(125,130,127))
 OUTPUT.parent.mkdir(parents=True,exist_ok=True)
 doc.save(OUTPUT)
 print(OUTPUT)
