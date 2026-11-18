@@ -117,6 +117,15 @@ CREATE TABLE work_domain (
   CONSTRAINT fk_wd_domain FOREIGN KEY (domain_id) REFERENCES domain(domain_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE scholar_domain (
+  scholar_id CHAR(26) NOT NULL,
+  domain_id CHAR(26) NOT NULL,
+  PRIMARY KEY (scholar_id, domain_id),
+  KEY ix_sd_domain (domain_id, scholar_id),
+  CONSTRAINT fk_sd_scholar FOREIGN KEY (scholar_id) REFERENCES scholar(scholar_id),
+  CONSTRAINT fk_sd_domain FOREIGN KEY (domain_id) REFERENCES domain(domain_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE claim_application (
   claim_id CHAR(26) PRIMARY KEY,
   applicant_account_id CHAR(26) NOT NULL,

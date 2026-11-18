@@ -54,6 +54,10 @@ entity "成果领域关系 work_domain" as WD {
   * work_id : CHAR(26) <<PK,FK>>
   * domain_id : CHAR(26) <<PK,FK>>
 }
+entity "学者领域关系 scholar_domain" as SD {
+  * scholar_id : CHAR(26) <<PK,FK>>
+  * domain_id : CHAR(26) <<PK,FK>>
+}
 entity "认领申请 claim_application" as Claim {
   * claim_id : CHAR(26) <<PK>>
   --
@@ -110,6 +114,8 @@ Work ||--o{ WS : 关联
 Scholar ||--o{ WS : 参与
 Work ||--o{ WD : 分类
 Domain ||--o{ WD : 包含
+Scholar ||--o{ SD : 研究
+Domain ||--o{ SD : 包含
 Account ||--o{ Claim : 提交
 Account ||--o{ Capability : 授予能力
 Scholar ||--o{ Claim : 目标

@@ -1,4 +1,4 @@
-"""Export the five Markdown coursework files to consistently styled DOCX."""
+"""Export the six Markdown coursework files to consistently styled DOCX."""
 from pathlib import Path
 import re
 from docx import Document
@@ -15,6 +15,7 @@ NAMES = [
     "06-接口设计说明书-可御风雪可燃冰",
     "08-组内过程记录-可御风雪可燃冰",
     "09-AI使用声明-可御风雪可燃冰",
+    "10-其他构件设计说明书-可御风雪可燃冰",
 ]
 
 def font(style, name="Microsoft YaHei", size=10.5, bold=None):
@@ -57,6 +58,8 @@ def inline(p, text):
 def make(name):
     src = ROOT / (name + ".md")
     lines = src.read_text(encoding="utf-8").splitlines()
+    match = re.search(r"V\d+\.\d+", "\n".join(lines[:5]))
+    version = match.group(0) if match else "初稿"
     doc = Document()
     sec = doc.sections[0]
     sec.page_width = Inches(8.5); sec.page_height = Inches(11)
@@ -75,7 +78,7 @@ def make(name):
         title_ppr.remove(border)
     title = lines[0].removeprefix("# ").strip()
     doc.add_paragraph(title, "Title")
-    doc.add_paragraph("03组 可御风雪可燃冰  ·  作业5构件设计  ·  V0.1 初稿  ·  2026-11-18")
+    doc.add_paragraph(f"03组 可御风雪可燃冰  ·  作业5构件设计  ·  {version} 初稿  ·  2026-11-18")
     doc.add_paragraph("成员与分工：待团队据实填写    签认：待联合评审")
     h1 = [x[3:] for x in lines if x.startswith("## ")]
     if h1:
@@ -86,6 +89,8 @@ def make(name):
     while i < len(lines):
         line = lines[i].strip()
         if not line:
+            i += 1; continue
+        if line.startswith("<!--"):
             i += 1; continue
         if line.startswith("!["):
             m = re.match(r"!\[([^\]]+)\]\(([^)]+)\)", line)
@@ -108,6 +113,13 @@ def make(name):
             table = doc.add_table(rows=len(rows), cols=cols)
             table.alignment = WD_TABLE_ALIGNMENT.CENTER
             table.autofit = True
+            if cols == 4 and rows[0][0] == "字段":
+                for col, width in zip(table.columns, (1.2, 1.05, 2.45, 1.9)):
+                    col.width = Inches(width)
+            header_trpr = table.rows[0]._tr.get_or_add_trPr()
+            repeat = OxmlElement("w:tblHeader")
+            repeat.set(qn("w:val"), "true")
+            header_trpr.append(repeat)
             for ri, cells in enumerate(rows):
                 for ci in range(cols):
                     cell = table.cell(ri, ci)

@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/work-type-details-v1.json",
+  "title": "四类学术成果 type_details 设计模式",
+  "description": "应用按 work.work_type 选择对应 $defs；缺失值保持缺失，不以虚构日期补齐。URL 为设计占位。",
+  "$defs": {
+    "paper": {
+      "type": "object",
+      "properties": {
+        "doi": {"type": "string", "maxLength": 300},
+        "venue": {"type": "string", "maxLength": 500},
+        "publicationDate": {"type": "string", "pattern": "^[0-9]{4}(-[0-9]{2}(-[0-9]{2})?)?$"},
+        "datePrecision": {"enum": ["year", "month", "day"]},
+        "publicationStatus": {"type": "string", "maxLength": 80},
+        "keywords": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "citationBySource": {"type": "array", "items": {"type": "object", "required": ["sourceId", "count"], "properties": {"sourceId": {"type": "string"}, "count": {"type": "integer", "minimum": 0}}}}
+      },
+      "additionalProperties": false
+    },
+    "patent": {
+      "type": "object",
+      "properties": {
+        "countryRegion": {"type": "string", "maxLength": 50},
+        "applicationNumber": {"type": "string", "maxLength": 200},
+        "publicationNumber": {"type": "string", "maxLength": 200},
+        "applicants": {"type": "array", "items": {"type": "string"}},
+        "inventors": {"type": "array", "items": {"type": "string"}},
+        "applicationDate": {"type": "string", "format": "date"},
+        "publicationDate": {"type": "string", "format": "date"},
+        "grantDate": {"type": "string", "format": "date"},
+        "ipcCodes": {"type": "array", "items": {"type": "string"}},
+        "status": {"type": "string", "maxLength": 100},
+        "statusSourceDate": {"type": "string", "format": "date"}
+      },
+      "additionalProperties": false
+    },
+    "project": {
+      "type": "object",
+      "properties": {
+        "sourceScope": {"type": "string", "maxLength": 100},
+        "projectNumber": {"type": "string", "maxLength": 200},
+        "principalInvestigators": {"type": "array", "items": {"type": "string"}},
+        "hostOrganizations": {"type": "array", "items": {"type": "string"}},
+        "category": {"type": "string", "maxLength": 200},
+        "startDate": {"type": "string", "pattern": "^[0-9]{4}(-[0-9]{2}(-[0-9]{2})?)?$"},
+        "endDate": {"type": "string", "pattern": "^[0-9]{4}(-[0-9]{2}(-[0-9]{2})?)?$"},
+        "status": {"type": "string", "maxLength": 100}
+      },
+      "additionalProperties": false
+    },
+    "award": {
+      "type": "object",
+      "properties": {
+        "awardName": {"type": "string", "maxLength": 300},
+        "year": {"type": "integer", "minimum": 1000, "maximum": 9999},
+        "grade": {"type": "string", "maxLength": 100},
+        "grantingOrganization": {"type": "string", "maxLength": 300},
+        "awardedWork": {"type": "string", "maxLength": 500},
+        "recipients": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -14,5 +14,57 @@
 <section id="review" class="page"><h1>图6 认领审核页</h1><p class="hint">审核管理员专用。批准前须重验账号、目标状态、已有授权及证据。</p><div class="card"><h2>待审申请 CL-001</h2><p>申请人：合成账号 A · 目标门户：张某 · 提交时间：2026-11-18</p><p><span class="badge">待审核</span> <span class="badge">冲突标记：无（演示）</span></p><p>本人声明：希望管理本人公开学者档案。证明：受控材料 1 份（仅授权审核员可打开）。</p><label>处理原因（必填）</label><textarea id="reviewReason" rows="2" placeholder="填写审核理由或补充要求"></textarea><p class="row"><button onclick="decision('待补充')">要求补充</button><button onclick="decision('已通过')">批准</button><button class="danger" onclick="decision('已驳回')">驳回</button></p><div id="reviewMsg" class="status">尚未作出决定。</div></div></section>
 </main><footer>OvO · 可御风雪可燃冰 · 课程构件设计线框初稿</footer>
 <script>
-let currentPage=1;function route(){let id=location.hash.slice(1)||'search';document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('nav a').forEach(x=>x.classList.toggle('active',x.hash==='#'+id));window.scrollTo(0,0)}addEventListener('hashchange',route);route();function page(n){currentPage=Math.max(1,currentPage+n);document.getElementById('pageNo').textContent='第'+currentPage+'页';document.getElementById('searchMsg').textContent='切页保留当前筛选条件。此页为离线原型，无真实后端数据。'}function search(){let a=Number(document.getElementById('yearStart').value),b=Number(document.getElementById('yearEnd').value),q=document.getElementById('keyword').value.trim();let msg=document.getElementById('searchMsg');currentPage=1;document.getElementById('pageNo').textContent='第1页';if(a&&b&&a>b){msg.textContent='年份范围无效：起始年份不能晚于结束年份。';msg.className='status error';return}msg.className='status';msg.textContent=q?'检索“'+q+'”：原型展示固定样例；条件已保留。':'展示公开样例；空关键词可按筛选条件浏览。'}function clearSearch(){document.querySelectorAll('#search input').forEach(x=>x.value='');document.querySelectorAll('#search select').forEach(x=>x.selectedIndex=0);search()}function submitClaim(){let d=document.getElementById('declaration').value.trim(),f=document.getElementById('evidence').files,m=document.getElementById('claimMsg');if(!d||!f.length||f.length>3||[...f].some(x=>x.size>10*1024*1024)){m.textContent='请填写本人声明，并上传1—3份不超过10 MiB的证明。';m.className='status error';return}m.className='status';m.textContent='原型反馈：申请 CL-DEMO 已提交，状态为待审核。真实系统仍需登录和后端校验。'}function taskAction(s){document.getElementById('taskState').textContent=s;document.getElementById('taskMsg').textContent='原型状态：'+s+'；不代表后台任务已执行。'}function decision(s){let v=document.getElementById('reviewReason').value.trim(),m=document.getElementById('reviewMsg');if(!v){m.textContent='请先填写处理原因。';m.className='status error';return}m.className='status';m.textContent='原型反馈：'+s+'；真实系统批准前还须重验授权冲突并写入审计。'}
+let currentPage=1;
+const workExamples=[...document.querySelectorAll('#results .result')].map(x=>x.innerHTML);
+function route(){
+  let id=location.hash.slice(1)||'search';
+  document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===id));
+  document.querySelectorAll('nav a').forEach(x=>x.classList.toggle('active',x.hash==='#'+id));
+  window.scrollTo(0,0);
+}
+addEventListener('hashchange',route);route();
+document.getElementById('scope').addEventListener('change',search);
+function page(n){
+  currentPage=Math.max(1,currentPage+n);
+  document.getElementById('pageNo').textContent='第'+currentPage+'页';
+  document.getElementById('searchMsg').textContent='切页保留当前筛选条件。此页为离线原型，无真实后端数据。';
+}
+function search(){
+  let a=Number(document.getElementById('yearStart').value),b=Number(document.getElementById('yearEnd').value);
+  let q=document.getElementById('keyword').value.trim(),scope=document.getElementById('scope').value;
+  let msg=document.getElementById('searchMsg'),rows=document.querySelectorAll('#results .result');
+  currentPage=1;document.getElementById('pageNo').textContent='第1页';
+  document.getElementById('type').disabled=scope==='学者';
+  if(a&&b&&a>b){msg.textContent='年份范围无效：起始年份不能晚于结束年份。';msg.className='status error';return}
+  msg.className='status';
+  msg.textContent=(q?'检索“'+q+'”':'浏览')+' · '+scope+'范围：下方是线框占位样例，不代表真实筛选结果。';
+  if(scope==='学者'){
+    rows[0].innerHTML='<span class="badge">学者</span> <a href="#scholar">张某（合成样例）</a><p class="mini">示例大学 · 计算机科学 · 未认领</p>';
+    rows[1].style.display='none';
+  }else{
+    rows[0].innerHTML=workExamples[0];rows[1].innerHTML=workExamples[1];rows[1].style.display='';
+  }
+}
+function clearSearch(){
+  document.querySelectorAll('#search input').forEach(x=>x.value='');
+  document.querySelectorAll('#search select').forEach(x=>x.selectedIndex=0);
+  search();
+}
+function submitClaim(){
+  let d=document.getElementById('declaration').value.trim(),f=document.getElementById('evidence').files,m=document.getElementById('claimMsg');
+  if(!d||!f.length||f.length>3||[...f].some(x=>x.size>10*1024*1024)){
+    m.textContent='请填写本人声明，并上传1—3份不超过10 MiB的证明。';m.className='status error';return;
+  }
+  m.className='status';m.textContent='原型反馈：申请 CL-DEMO 已提交，状态为待审核。真实系统仍需登录和后端校验。';
+}
+function taskAction(s){
+  document.getElementById('taskState').textContent=s;
+  document.getElementById('taskMsg').textContent='原型状态：'+s+'；不代表后台任务已执行。';
+}
+function decision(s){
+  let v=document.getElementById('reviewReason').value.trim(),m=document.getElementById('reviewMsg');
+  if(!v){m.textContent='请先填写处理原因。';m.className='status error';return}
+  m.className='status';m.textContent='原型反馈：'+s+'；真实系统批准前还须重验授权冲突并写入审计。';
+}
+search();
 </script></body></html>

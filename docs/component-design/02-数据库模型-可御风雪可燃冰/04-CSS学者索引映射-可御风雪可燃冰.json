@@ -1,0 +1,33 @@
+{
+  "description": "设计稿：public_scholar_v1 逻辑索引。只索引当前公开学者资料；授权与认领证明留在 RDS/OBS。",
+  "indexAlias": "public_scholar_v1",
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "zh_en_standard": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": ["lowercase"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "dynamic": "strict",
+    "properties": {
+      "scholar_id": {"type": "keyword"},
+      "version": {"type": "long"},
+      "display_name": {"type": "text", "analyzer": "zh_en_standard", "fields": {"raw": {"type": "keyword", "ignore_above": 256}}},
+      "aliases": {"type": "text", "analyzer": "zh_en_standard", "fields": {"raw": {"type": "keyword", "ignore_above": 256}}},
+      "biography": {"type": "text", "analyzer": "zh_en_standard"},
+      "organization_id": {"type": "keyword"},
+      "domain_ids": {"type": "keyword"},
+      "identity_status": {"type": "keyword"},
+      "data_nature": {"type": "keyword"},
+      "updated_at": {"type": "date"},
+      "source_public": {"type": "boolean"}
+    }
+  },
+  "facetFields": ["organization_id", "domain_ids", "data_nature"],
+  "sortTieBreaker": ["_score", "display_name.raw", "scholar_id"]
+}

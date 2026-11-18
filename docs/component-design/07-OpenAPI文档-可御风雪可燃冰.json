@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "学术成果分享平台核心接口",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "作业5构件设计初稿；合成示例，未实现。"
   },
   "servers": [
@@ -12,6 +12,9 @@
     }
   ],
   "tags": [
+    {
+      "name": "账号"
+    },
     {
       "name": "搜索"
     },
@@ -26,6 +29,9 @@
     },
     {
       "name": "统计"
+    },
+    {
+      "name": "分类"
     }
   ],
   "paths": {
@@ -179,6 +185,284 @@
             "schema": {
               "type": "string"
             }
+          }
+        ]
+      }
+    },
+    "/search/scholars": {
+      "get": {
+        "tags": [
+          "搜索"
+        ],
+        "summary": "检索公开学者",
+        "operationId": "getSearchScholars",
+        "responses": {
+          "200": {
+            "description": "学者候选经 RDS 复核",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScholarSearchPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "description": "姓名、别名与公开简介",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "domainId",
+            "in": "query",
+            "required": false,
+            "description": "研究领域",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "organizationId",
+            "in": "query",
+            "required": false,
+            "description": "公开机构",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "每页数量",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "description": "续页游标",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/domains": {
+      "get": {
+        "tags": [
+          "分类"
+        ],
+        "summary": "查询公开领域树",
+        "operationId": "getDomains",
+        "responses": {
+          "200": {
+            "description": "分类树",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DomainNode"
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts": {
+      "post": {
+        "tags": [
+          "账号"
+        ],
+        "summary": "注册账号",
+        "operationId": "postAccounts",
+        "responses": {
+          "201": {
+            "description": "已创建账号",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Account"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountCreate"
+              }
+            }
+          }
+        },
+        "description": "密码只通过 HTTPS 传输，服务端存单向哈希；重复登录名返回冲突。"
+      }
+    },
+    "/sessions": {
+      "post": {
+        "tags": [
+          "账号"
+        ],
+        "summary": "登录并获取会话",
+        "operationId": "postSessions",
+        "responses": {
+          "201": {
+            "description": "新会话",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionCreate"
+              }
+            }
+          }
+        },
+        "description": "失败反馈不透露账号是否存在；令牌不得写入 URL 或日志。"
+      }
+    },
+    "/sessions/current": {
+      "delete": {
+        "tags": [
+          "账号"
+        ],
+        "summary": "退出当前会话",
+        "operationId": "deleteSessionsCurrent",
+        "responses": {
+          "204": {
+            "description": "会话已失效"
+          },
+          "401": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
           }
         ]
       }
@@ -381,6 +665,92 @@
           }
         ],
         "description": "证明引用必须由受控上传流程签发；不得传任意 OBS 地址。"
+      }
+    },
+    "/claim-evidence": {
+      "post": {
+        "tags": [
+          "认领"
+        ],
+        "summary": "上传受控认领证明",
+        "operationId": "postClaimEvidence",
+        "responses": {
+          "201": {
+            "description": "短期证明引用",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EvidenceReference"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "仅接受 PDF/JPEG/PNG；每份不超过 10 MiB。文件经服务端校验后存入私有 OBS，返回不暴露对象键的短期引用。",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "file"
+                ]
+              }
+            }
+          }
+        }
       }
     },
     "/claims/{claimId}": {
@@ -739,6 +1109,128 @@
           }
         ],
         "description": "仅保存任务，不在请求中执行采集。"
+      },
+      "get": {
+        "tags": [
+          "采集管理"
+        ],
+        "summary": "查询采集任务列表",
+        "operationId": "getAdminCollectionTasks",
+        "responses": {
+          "200": {
+            "description": "任务列表",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskList"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "state",
+            "in": "query",
+            "required": false,
+            "description": "任务状态",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sourceId",
+            "in": "query",
+            "required": false,
+            "description": "来源",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "description": "续页游标",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/admin/data-sources": {
+      "get": {
+        "tags": [
+          "采集管理"
+        ],
+        "summary": "查询获准数据来源",
+        "operationId": "getAdminDataSources",
+        "responses": {
+          "200": {
+            "description": "登记来源",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SourceSummary"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/admin/collection-tasks/{taskId}": {
@@ -1018,6 +1510,151 @@
                 "all"
               ]
             }
+          }
+        ]
+      }
+    },
+    "/statistics/hotspots": {
+      "get": {
+        "tags": [
+          "统计"
+        ],
+        "summary": "查询公开关键词热点",
+        "operationId": "getStatisticsHotspots",
+        "responses": {
+          "200": {
+            "description": "样本不足时不发布名次",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HotspotPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "domainId",
+            "in": "query",
+            "required": false,
+            "description": "领域",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "yearFrom",
+            "in": "query",
+            "required": false,
+            "description": "起始年份",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "yearTo",
+            "in": "query",
+            "required": false,
+            "description": "结束年份",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ]
+      }
+    },
+    "/admin/audit-events": {
+      "get": {
+        "tags": [
+          "采集管理"
+        ],
+        "summary": "查询审计事件",
+        "operationId": "getAdminAuditEvents",
+        "responses": {
+          "200": {
+            "description": "脱敏审计列表",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuditPage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "objectType",
+            "in": "query",
+            "required": false,
+            "description": "对象类型",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "objectId",
+            "in": "query",
+            "required": false,
+            "description": "对象标识",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "description": "续页游标",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
           }
         ]
       }
@@ -1546,17 +2183,18 @@
           "declaration": {
             "type": "string"
           },
-          "evidenceObjectKeys": {
+          "evidenceRefs": {
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "string",
+              "description": "由受控上传接口签发的短期引用；不能传任意 OBS 地址"
             }
           }
         },
         "required": [
           "targetScholarId",
           "declaration",
-          "evidenceObjectKeys"
+          "evidenceRefs"
         ]
       },
       "Claim": {
@@ -1886,6 +2524,316 @@
           "scholarIds",
           "paperEvidence",
           "scope"
+        ]
+      },
+      "ScholarSummary": {
+        "type": "object",
+        "properties": {
+          "scholarId": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "organization": {
+            "type": "string",
+            "nullable": true
+          },
+          "identityStatus": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "scholarId",
+          "displayName",
+          "identityStatus",
+          "version"
+        ]
+      },
+      "ScholarSearchPage": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScholarSummary"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          },
+          "totalRelation": {
+            "type": "string",
+            "enum": [
+              "exact",
+              "estimated"
+            ]
+          }
+        },
+        "required": [
+          "items",
+          "nextCursor",
+          "totalRelation"
+        ]
+      },
+      "DomainNode": {
+        "type": "object",
+        "properties": {
+          "domainId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "parentId": {
+            "type": "string",
+            "nullable": true
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "domainId",
+          "name",
+          "children"
+        ]
+      },
+      "SourceSummary": {
+        "type": "object",
+        "properties": {
+          "sourceId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "sourceKind": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "verifiedAt": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "sourceId",
+          "name",
+          "sourceKind",
+          "enabled"
+        ]
+      },
+      "TaskList": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Task"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "items",
+          "nextCursor"
+        ]
+      },
+      "HotspotPage": {
+        "type": "object",
+        "properties": {
+          "scope": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "sampleCount": {
+            "type": "integer"
+          },
+          "rankingAvailable": {
+            "type": "boolean"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "term": {
+                  "type": "string"
+                },
+                "documentCount": {
+                  "type": "integer"
+                },
+                "rank": {
+                  "type": "integer",
+                  "nullable": true
+                }
+              },
+              "required": [
+                "term",
+                "documentCount"
+              ]
+            }
+          }
+        },
+        "required": [
+          "scope",
+          "updatedAt",
+          "sampleCount",
+          "rankingAvailable",
+          "items"
+        ]
+      },
+      "EvidenceReference": {
+        "type": "object",
+        "properties": {
+          "evidenceRef": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string"
+          },
+          "fileName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "evidenceRef",
+          "expiresAt",
+          "fileName"
+        ]
+      },
+      "AccountCreate": {
+        "type": "object",
+        "properties": {
+          "loginName": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "loginName",
+          "password"
+        ]
+      },
+      "Account": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "type": "string"
+          },
+          "loginName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "accountId",
+          "loginName",
+          "status"
+        ]
+      },
+      "SessionCreate": {
+        "type": "object",
+        "properties": {
+          "loginName": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "loginName",
+          "password"
+        ]
+      },
+      "Session": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          },
+          "tokenType": {
+            "type": "string",
+            "enum": [
+              "Bearer"
+            ]
+          },
+          "expiresAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "accessToken",
+          "tokenType",
+          "expiresAt"
+        ]
+      },
+      "AuditPage": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "auditId": {
+                  "type": "string"
+                },
+                "action": {
+                  "type": "string"
+                },
+                "objectType": {
+                  "type": "string"
+                },
+                "objectId": {
+                  "type": "string"
+                },
+                "outcome": {
+                  "type": "string"
+                },
+                "happenedAt": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "auditId",
+                "action",
+                "objectType",
+                "objectId",
+                "outcome",
+                "happenedAt"
+              ]
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "items",
+          "nextCursor"
         ]
       }
     }
