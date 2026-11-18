@@ -1,0 +1,1893 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "学术成果分享平台核心接口",
+    "version": "0.1.0",
+    "description": "作业5构件设计初稿；合成示例，未实现。"
+  },
+  "servers": [
+    {
+      "url": "https://example.invalid/api/v1",
+      "description": "设计占位地址，不是线上服务"
+    }
+  ],
+  "tags": [
+    {
+      "name": "搜索"
+    },
+    {
+      "name": "公开详情"
+    },
+    {
+      "name": "认领"
+    },
+    {
+      "name": "采集管理"
+    },
+    {
+      "name": "统计"
+    }
+  ],
+  "paths": {
+    "/search/works": {
+      "get": {
+        "tags": [
+          "搜索"
+        ],
+        "summary": "检索公开成果",
+        "operationId": "getSearchWorks",
+        "responses": {
+          "200": {
+            "description": "公开候选经 RDS 复核",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "description": "关键词，空值允许浏览",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "description": "成果类型",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "paper",
+                "patent",
+                "project",
+                "award"
+              ]
+            }
+          },
+          {
+            "name": "yearFrom",
+            "in": "query",
+            "required": false,
+            "description": "起始年份含边界",
+            "schema": {
+              "type": "integer",
+              "minimum": 1000,
+              "maximum": 9999
+            }
+          },
+          {
+            "name": "yearTo",
+            "in": "query",
+            "required": false,
+            "description": "结束年份含边界",
+            "schema": {
+              "type": "integer",
+              "minimum": 1000,
+              "maximum": 9999
+            }
+          },
+          {
+            "name": "domainId",
+            "in": "query",
+            "required": false,
+            "description": "父领域包含子领域",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "organizationId",
+            "in": "query",
+            "required": false,
+            "description": "机构",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dataNature",
+            "in": "query",
+            "required": false,
+            "description": "默认 real",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "real",
+                "all"
+              ]
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "排序",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "relevance",
+                "time"
+              ]
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "每页数量",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "description": "绑定筛选条件的续页游标",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/works/{workId}": {
+      "get": {
+        "tags": [
+          "公开详情"
+        ],
+        "summary": "查询公开成果详情",
+        "operationId": "getWorksWorkid",
+        "responses": {
+          "200": {
+            "description": "成果",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "workId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/scholars/{scholarId}": {
+      "get": {
+        "tags": [
+          "公开详情"
+        ],
+        "summary": "查询学者门户",
+        "operationId": "getScholarsScholarid",
+        "responses": {
+          "200": {
+            "description": "门户",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScholarPortal"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "scholarId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/claims": {
+      "post": {
+        "tags": [
+          "认领"
+        ],
+        "summary": "提交认领申请",
+        "operationId": "postClaims",
+        "responses": {
+          "201": {
+            "description": "已创建申请",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Claim"
+                }
+              }
+            },
+            "headers": {
+              "Location": {
+                "description": "新资源的状态查询地址",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128
+            },
+            "description": "同一账号和路径下重复请求返回原结果"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClaimCreate"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "证明引用必须由受控上传流程签发；不得传任意 OBS 地址。"
+      }
+    },
+    "/claims/{claimId}": {
+      "get": {
+        "tags": [
+          "认领"
+        ],
+        "summary": "查询本人申请进度",
+        "operationId": "getClaimsClaimid",
+        "responses": {
+          "200": {
+            "description": "仅本人可见",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Claim"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "claimId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/admin/claims": {
+      "get": {
+        "tags": [
+          "认领"
+        ],
+        "summary": "查询待审申请",
+        "operationId": "getAdminClaims",
+        "responses": {
+          "200": {
+            "description": "审核队列",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClaimList"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "state",
+            "in": "query",
+            "required": false,
+            "description": "审核状态",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "description": "续页游标",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/admin/claims/{claimId}/decision": {
+      "post": {
+        "tags": [
+          "认领"
+        ],
+        "summary": "处理认领申请",
+        "operationId": "postAdminClaimsClaimidDecision",
+        "responses": {
+          "200": {
+            "description": "决定已提交",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Claim"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "claimId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128
+            },
+            "description": "同一账号和路径下重复请求返回原结果"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClaimDecision"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "批准、门户授权、审计及 Outbox 在同一 RDS 事务提交。"
+      }
+    },
+    "/admin/collection-tasks": {
+      "post": {
+        "tags": [
+          "采集管理"
+        ],
+        "summary": "创建异步采集任务",
+        "operationId": "postAdminCollectionTasks",
+        "responses": {
+          "202": {
+            "description": "已受理，轮询任务状态",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Task"
+                }
+              }
+            },
+            "headers": {
+              "Location": {
+                "description": "新资源的状态查询地址",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128
+            },
+            "description": "同一账号和路径下重复请求返回原结果"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskCreate"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "仅保存任务，不在请求中执行采集。"
+      }
+    },
+    "/admin/collection-tasks/{taskId}": {
+      "get": {
+        "tags": [
+          "采集管理"
+        ],
+        "summary": "查询采集任务进度",
+        "operationId": "getAdminCollectionTasksTaskid",
+        "responses": {
+          "200": {
+            "description": "任务进度",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Task"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/admin/collection-tasks/{taskId}/actions": {
+      "post": {
+        "tags": [
+          "采集管理"
+        ],
+        "summary": "启动停止或重试任务",
+        "operationId": "postAdminCollectionTasksTaskidActions",
+        "responses": {
+          "202": {
+            "description": "动作已受理",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Task"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 128
+            },
+            "description": "同一账号和路径下重复请求返回原结果"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskAction"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/statistics/works": {
+      "get": {
+        "tags": [
+          "统计"
+        ],
+        "summary": "查询公开成果分布",
+        "operationId": "getStatisticsWorks",
+        "responses": {
+          "200": {
+            "description": "成果实体去重计数",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Statistics"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "description": "可选成果类型",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "paper",
+                "patent",
+                "project",
+                "award"
+              ]
+            }
+          },
+          {
+            "name": "domainId",
+            "in": "query",
+            "required": false,
+            "description": "领域",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "yearFrom",
+            "in": "query",
+            "required": false,
+            "description": "起始年份",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "yearTo",
+            "in": "query",
+            "required": false,
+            "description": "结束年份",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "dataNature",
+            "in": "query",
+            "required": false,
+            "description": "默认 real",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "real",
+                "all"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "/scholars/{scholarId}/collaboration-network": {
+      "get": {
+        "tags": [
+          "统计"
+        ],
+        "summary": "查询公开论文合作网络",
+        "operationId": "getScholarsScholaridCollaborationNetwork",
+        "responses": {
+          "200": {
+            "description": "有证据的无向网络",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollaborationNetwork"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "scholarId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "domainId",
+            "in": "query",
+            "required": false,
+            "description": "支撑论文领域",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "organizationId",
+            "in": "query",
+            "required": false,
+            "description": "论文发生时双方机构",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "yearFrom",
+            "in": "query",
+            "required": false,
+            "description": "起始年份",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "yearTo",
+            "in": "query",
+            "required": false,
+            "description": "结束年份",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ]
+      }
+    },
+    "/collaboration-path": {
+      "get": {
+        "tags": [
+          "统计"
+        ],
+        "summary": "查询两学者最短合作路径",
+        "operationId": "getCollaborationPath",
+        "responses": {
+          "200": {
+            "description": "按跳数的路径与逐跳论文证据",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollaborationPath"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "统一错误响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "fromScholarId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "toScholarId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "domainId",
+            "in": "query",
+            "required": false,
+            "description": "支撑论文领域",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "organizationId",
+            "in": "query",
+            "required": false,
+            "description": "论文发生时双方机构",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "description": "超限或中断时 status=incomplete，不宣称最短。"
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "opaque"
+      }
+    },
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {
+                "type": "object",
+                "properties": {}
+              },
+              "requestId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "requestId"
+            ]
+          }
+        },
+        "required": [
+          "error"
+        ]
+      },
+      "WorkSummary": {
+        "type": "object",
+        "properties": {
+          "workId": {
+            "type": "string"
+          },
+          "workType": {
+            "type": "string",
+            "enum": [
+              "paper",
+              "patent",
+              "project",
+              "award"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "publicationYear": {
+            "type": "integer",
+            "nullable": true
+          },
+          "dataNature": {
+            "type": "string",
+            "enum": [
+              "real",
+              "simulated",
+              "mixed"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "workId",
+          "workType",
+          "title",
+          "dataNature",
+          "version"
+        ]
+      },
+      "SearchPage": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkSummary"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "totalRelation": {
+            "type": "string",
+            "enum": [
+              "exact",
+              "estimated"
+            ]
+          },
+          "facets": {
+            "type": "object",
+            "properties": {
+              "workTypes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    },
+                    "count": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "count"
+                  ]
+                }
+              },
+              "years": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    },
+                    "count": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "count"
+                  ]
+                }
+              }
+            }
+          },
+          "emptyReason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "items",
+          "nextCursor",
+          "totalRelation"
+        ]
+      },
+      "WorkDetail": {
+        "type": "object",
+        "properties": {
+          "workId": {
+            "type": "string"
+          },
+          "workType": {
+            "type": "string",
+            "enum": [
+              "paper",
+              "patent",
+              "project",
+              "award"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "publicationYear": {
+            "type": "integer",
+            "nullable": true
+          },
+          "dataNature": {
+            "type": "string",
+            "enum": [
+              "real",
+              "simulated",
+              "mixed"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "abstract": {
+            "type": "string",
+            "nullable": true
+          },
+          "typeDetails": {
+            "type": "object",
+            "properties": {}
+          },
+          "participants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "scholarId": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string"
+                },
+                "confirmationStatus": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "scholarId",
+                "name",
+                "role",
+                "confirmationStatus"
+              ]
+            }
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "externalId": {
+                  "type": "string"
+                },
+                "collectedAt": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "externalId",
+                "collectedAt"
+              ]
+            }
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workId",
+          "workType",
+          "title",
+          "dataNature",
+          "version",
+          "typeDetails",
+          "participants",
+          "sources",
+          "updatedAt"
+        ]
+      },
+      "ScholarPortal": {
+        "type": "object",
+        "properties": {
+          "scholarId": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "organization": {
+            "type": "string",
+            "nullable": true
+          },
+          "biography": {
+            "type": "string",
+            "nullable": true
+          },
+          "claimStatus": {
+            "type": "string",
+            "enum": [
+              "unclaimed",
+              "claimed",
+              "under_review"
+            ]
+          },
+          "works": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkSummary"
+            }
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "scholarId",
+          "displayName",
+          "claimStatus",
+          "works",
+          "updatedAt"
+        ]
+      },
+      "ClaimCreate": {
+        "type": "object",
+        "properties": {
+          "targetScholarId": {
+            "type": "string"
+          },
+          "declaration": {
+            "type": "string"
+          },
+          "evidenceObjectKeys": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "targetScholarId",
+          "declaration",
+          "evidenceObjectKeys"
+        ]
+      },
+      "Claim": {
+        "type": "object",
+        "properties": {
+          "claimId": {
+            "type": "string"
+          },
+          "targetScholarId": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "pending_review",
+              "needs_more",
+              "approved",
+              "rejected"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "submittedAt": {
+            "type": "string"
+          },
+          "applicantVisibleReason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "claimId",
+          "targetScholarId",
+          "state",
+          "version",
+          "submittedAt"
+        ]
+      },
+      "ClaimList": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Claim"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "items",
+          "nextCursor"
+        ]
+      },
+      "ClaimDecision": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "request_more",
+              "approve",
+              "reject"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          },
+          "expectedVersion": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "action",
+          "reason",
+          "expectedVersion"
+        ]
+      },
+      "TaskCreate": {
+        "type": "object",
+        "properties": {
+          "sourceId": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "incremental",
+              "full"
+            ]
+          },
+          "scope": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sourceId",
+          "mode",
+          "scope"
+        ]
+      },
+      "Task": {
+        "type": "object",
+        "properties": {
+          "taskId": {
+            "type": "string"
+          },
+          "sourceId": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "running",
+              "succeeded",
+              "failed",
+              "stopped",
+              "retrying"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "processedCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "successCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "failureCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "progressPercent": {
+            "type": "number",
+            "nullable": true
+          },
+          "failureReason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "taskId",
+          "sourceId",
+          "state",
+          "version",
+          "processedCount",
+          "successCount",
+          "failureCount"
+        ]
+      },
+      "TaskAction": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "start",
+              "stop",
+              "retry"
+            ]
+          },
+          "expectedVersion": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "action",
+          "expectedVersion"
+        ]
+      },
+      "Statistics": {
+        "type": "object",
+        "properties": {
+          "scope": {
+            "type": "string"
+          },
+          "dataNature": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "distinctWorkCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "byType": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              },
+              "required": [
+                "type",
+                "count"
+              ]
+            }
+          }
+        },
+        "required": [
+          "scope",
+          "dataNature",
+          "updatedAt",
+          "distinctWorkCount",
+          "byType"
+        ]
+      },
+      "CollaborationEdge": {
+        "type": "object",
+        "properties": {
+          "fromScholarId": {
+            "type": "string"
+          },
+          "toScholarId": {
+            "type": "string"
+          },
+          "paperIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "strength": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "fromScholarId",
+          "toScholarId",
+          "paperIds",
+          "strength"
+        ]
+      },
+      "CollaborationNetwork": {
+        "type": "object",
+        "properties": {
+          "scholarIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "edges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CollaborationEdge"
+            }
+          },
+          "scope": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "scholarIds",
+          "edges",
+          "scope",
+          "updatedAt"
+        ]
+      },
+      "CollaborationPath": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "found",
+              "no_path",
+              "incomplete"
+            ]
+          },
+          "scholarIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "paperEvidence": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "hopCount": {
+            "type": "integer",
+            "nullable": true
+          },
+          "scope": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "scholarIds",
+          "paperEvidence",
+          "scope"
+        ]
+      }
+    }
+  }
+}

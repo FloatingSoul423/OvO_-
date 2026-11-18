@@ -1,0 +1,124 @@
+@startuml
+title 学术成果分享平台 E-R 概念模型
+hide circle
+skinparam linetype ortho
+skinparam entity {
+  BackgroundColor #F7FAFD
+  BorderColor #325A7E
+}
+entity "账号 account" as Account {
+  * account_id : CHAR(26) <<PK>>
+  --
+  login_name : VARCHAR(32)
+  status : VARCHAR(16)
+}
+entity "管理能力 account_capability" as Capability {
+  * account_id : CHAR(26) <<PK,FK>>
+  * capability_code : VARCHAR(60) <<PK>>
+}
+entity "学者 scholar" as Scholar {
+  * scholar_id : CHAR(26) <<PK>>
+  --
+  display_name : VARCHAR(200)
+  identity_status : VARCHAR(16)
+  public_status : VARCHAR(16)
+}
+entity "机构 organization" as Org {
+  * organization_id : CHAR(26) <<PK>>
+  --
+  name : VARCHAR(300)
+}
+entity "领域 domain" as Domain {
+  * domain_id : CHAR(26) <<PK>>
+  --
+  name : VARCHAR(200)
+  parent_id : CHAR(26) <<FK>>
+}
+entity "学术成果 work" as Work {
+  * work_id : CHAR(26) <<PK>>
+  --
+  work_type : paper/patent/project/award
+  title : VARCHAR(1000)
+  public_status : VARCHAR(16)
+  data_nature : real/simulated/mixed
+  version : BIGINT
+}
+entity "成果学者关系 work_scholar" as WS {
+  * relation_id : CHAR(26) <<PK>>
+  --
+  work_id : CHAR(26) <<FK>>
+  scholar_id : CHAR(26) <<FK>>
+  role, author_order, confirmation_status
+}
+entity "成果领域关系 work_domain" as WD {
+  * work_id : CHAR(26) <<PK,FK>>
+  * domain_id : CHAR(26) <<PK,FK>>
+}
+entity "认领申请 claim_application" as Claim {
+  * claim_id : CHAR(26) <<PK>>
+  --
+  applicant_account_id : CHAR(26) <<FK>>
+  target_scholar_id : CHAR(26) <<FK>>
+  state, reason, version
+}
+entity "门户授权 portal_grant" as Grant {
+  * grant_id : CHAR(26) <<PK>>
+  --
+  account_id : CHAR(26) <<FK>>
+  scholar_id : CHAR(26) <<FK>>
+  active
+}
+entity "数据来源 data_source" as Source {
+  * source_id : CHAR(26) <<PK>>
+  --
+  source_kind, license_scope, enabled
+}
+entity "来源记录 source_record" as SR {
+  * record_id : CHAR(26) <<PK>>
+  --
+  source_id : CHAR(26) <<FK>>
+  work_id : CHAR(26) <<FK>>
+  external_id, source_updated_at
+}
+entity "来源版本 source_record_history" as SRH {
+  * record_id : CHAR(26) <<PK,FK>>
+  * record_version : BIGINT <<PK>>
+  --
+  content_hash, observed_at, change_kind
+}
+entity "采集任务 collection_task" as Task {
+  * task_id : CHAR(26) <<PK>>
+  --
+  source_id : CHAR(26) <<FK>>
+  state, checkpoint, retry_count
+}
+entity "审计日志 audit_log" as Audit {
+  * audit_id : CHAR(26) <<PK>>
+  --
+  actor_account_id : CHAR(26) <<FK>>
+  object_type, object_id, action
+}
+entity "待投递事件 outbox_event" as Outbox {
+  * event_id : CHAR(26) <<PK>>
+  --
+  aggregate_type, aggregate_id, aggregate_version
+}
+
+Org |o--o{ Scholar : 任职机构
+Domain |o--o{ Domain : 父子领域
+Work ||--o{ WS : 关联
+Scholar ||--o{ WS : 参与
+Work ||--o{ WD : 分类
+Domain ||--o{ WD : 包含
+Account ||--o{ Claim : 提交
+Account ||--o{ Capability : 授予能力
+Scholar ||--o{ Claim : 目标
+Account ||--o{ Grant : 获授权
+Scholar ||--o{ Grant : 门户
+Source ||--o{ SR : 提供
+SR ||--o{ SRH : 保留版本
+Work |o--o{ SR : 归并
+Source ||--o{ Task : 调度
+Account |o--o{ Audit : 操作
+Work |o--o{ Outbox : 变更事件
+@enduml

@@ -1,0 +1,34 @@
+{
+  "description": "设计稿：public_work_v1 逻辑索引。仅可公开字段；目标 CSS 版本与分词插件须部署前核验。",
+  "indexAlias": "public_work_v1",
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "zh_en_standard": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": ["lowercase"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "dynamic": "strict",
+    "properties": {
+      "work_id": {"type": "keyword"},
+      "version": {"type": "long"},
+      "work_type": {"type": "keyword"},
+      "data_nature": {"type": "keyword"},
+      "title": {"type": "text", "analyzer": "zh_en_standard", "fields": {"raw": {"type": "keyword", "ignore_above": 1024}}},
+      "abstract": {"type": "text", "analyzer": "zh_en_standard"},
+      "keywords": {"type": "text", "analyzer": "zh_en_standard", "fields": {"raw": {"type": "keyword"}}},
+      "publication_year": {"type": "integer"},
+      "domain_ids": {"type": "keyword"},
+      "organization_ids": {"type": "keyword"},
+      "sort_time": {"type": "date"},
+      "source_public": {"type": "boolean"}
+    }
+  },
+  "facetFields": ["work_type", "publication_year", "domain_ids", "organization_ids", "data_nature"],
+  "sortTieBreaker": ["_score", "sort_time", "work_id"]
+}

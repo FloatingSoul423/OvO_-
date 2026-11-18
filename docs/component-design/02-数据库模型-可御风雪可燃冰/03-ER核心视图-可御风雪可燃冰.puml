@@ -1,0 +1,57 @@
+@startuml
+title 八类核心实体关系
+hide circle
+skinparam linetype ortho
+skinparam entity {
+  BackgroundColor #F7FAFD
+  BorderColor #325A7E
+}
+entity "学者 scholar" as Scholar {
+  * scholar_id <<PK>>
+  --
+  姓名／身份状态
+}
+entity "机构 organization" as Org {
+  * organization_id <<PK>>
+  --
+  名称
+}
+entity "成果 work" as Work {
+  * work_id <<PK>>
+  --
+  类型／标题／公开版本
+}
+entity "成果学者关系 work_scholar" as WS {
+  * relation_id <<PK>>
+  --
+  角色／顺序／确认状态
+}
+entity "领域 domain" as Domain {
+  * domain_id <<PK>>
+  --
+  名称／父领域
+}
+entity "认领申请 claim_application" as Claim {
+  * claim_id <<PK>>
+  --
+  申请人／目标／状态
+}
+entity "采集任务 collection_task" as Task {
+  * task_id <<PK>>
+  --
+  来源／状态／检查点
+}
+entity "审计日志 audit_log" as Audit {
+  * audit_id <<PK>>
+  --
+  操作者／对象／动作
+}
+Org |o--o{ Scholar : 任职
+Scholar ||--o{ WS : 参与
+Work ||--o{ WS : 关联
+Work }o--o{ Domain : 分类
+Scholar ||--o{ Claim : 认领目标
+Task ..> Work : 产生候选
+Claim ..> Audit : 决定留痕
+Task ..> Audit : 操作留痕
+@enduml
