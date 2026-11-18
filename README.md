@@ -15,7 +15,7 @@
 
 - 需求阶段：本组 SRS V0.4、SPEC、需求追踪与图模保存在 `docs/srs/`、`docs/spec/`、`docs/uml/`；共同基线仍为 V1.9。
 - 架构阶段：作业4材料保存在 [`docs/architecture/`](docs/architecture/README.md)，ADR 等部分决策尚待两组联合签认。
-- 构件阶段：作业5数据库、UI、接口说明书和可打开源文件已形成 [`V0.1 初稿`](docs/component-design/README.md)；目标环境验证、两小组对比、成员签认待完成。
+- 构件阶段：作业5数据库、UI、接口说明书和可打开源文件已形成 [`AI 辅助参考初稿`](docs/component-design/README.md)；尚未与成员在仓库外的交付比对，目标环境验证、两小组对比和签认待完成。
 
 ## 当前阶段边界
 
